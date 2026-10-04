@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Семейный сборщик в дорогу</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    .app {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+    }
+
+    label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row > div {
+      flex: 1;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+      background: #222;
+      color: white;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 25px;
+      font-size: 18px;
+    }
+
+    .category {
+      background: white;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      padding: 18px;
+    }
+
+    .category h2 {
+      margin-top: 0;
+    }
+
+    .category ul {
+      padding-left: 22px;
+    }
+
+    .category li {
+      margin: 10px 0;
+    }
+
+    .clothes {
+      background: #f2f2f2;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .error {
+      background: #ffe5e5;
+      color: #a00000;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 15px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <h1>🧳 Семейный сборщик в дорогу</h1>
+
+  <div id="formScreen" class="card">
+
+    <label>Откуда</label>
+    <input id="from" value="Калининград">
+
+    <label>Куда</label>
+    <input id="to" value="Гоа, Индия">
+
+    <label>На сколько дней</label>
+    <input id="days" type="number" value="90">
+
+    <div class="row">
+      <div>
+        <label>Взрослых</label>
+        <input id="adults" type="number" value="2" min="1">
+      </div>
+
+      <div>
+        <label>Детей</label>
+        <input id="children" type="number" value="3" min="0">
+      </div>
+    </div>
+
+    <button id="buildButton" onclick="buildPackingList()">
+      ✨ Собрать мой список
+    </button>
+
+  </div>
+
+  <div id="loading" class="loading hidden">
+    🤖 ИИ анализирует вашу поездку...
+  </div>
+
+  <div id="result"></div>
+
+</div>
+
+<script>
+
+async function buildPackingList() {
+
+  const button = document.getElementById("buildButton");
+  const loading = document.getElementById("loading");
+  const result = document.getElementById("result");
+
+  const trip = {
+    from: document.getElementById("from").value,
+    to: document.getElementById("to").value,
+    days: Number(document.getElementById("days").value),
+    adults: Number(document.getElementById("adults").value),
+    children: Number(document.getElementById("children").value)
+  };
+
+  button.disabled = true;
+  loading.classList.remove("hidden");
+  result.innerHTML = "";
+
+  try {
+
+    const response = await fetch("/api/packing", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(trip)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Ошибка сервера");
+    }
+
+    showResult(data.result);
+
+  } catch (error) {
+
+    result.innerHTML = `
+      <div class="error">
+        ❌ ${escapeHtml(error.message)}
+      </div>
+    `;
+
+  } finally {
+
+    button.disabled = false;
+    loading.classList.add("hidden");
+  }
+}
+
+
+function showResult(text) {
+
+  const result = document.getElementById("result");
+
+  let data;
+
+  try {
+    data = JSON.parse(text);
+  } catch {
+
+    result.innerHTML = `
+      <div class="category">
+        <h2>🤖 Ответ ИИ</h2>
+        <pre style="white-space:pre-wrap">${escapeHtml(text)}</pre>
+      </div>
+    `;
+
+    return;
+  }
+
+  result.innerHTML = "";
+
+  const categories = [
+    "Обязательно",
+    "Желательно",
+    "Было бы прикольно"
+  ];
+
+  categories.forEach(categoryName => {
+
+    const category = document.createElement("div");
+    category.className = "category";
+
+    const title = document.createElement("h2");
+    title.textContent = categoryName;
+
+    category.appendChild(title);
+
+    const items = data[categoryName] || [];
+
+    items.forEach(item => {
+
+      if (item.name === "Одежда" && Array.isArray(item.items)) {
+
+        const clothes = document.createElement("div");
+        clothes.className = "clothes";
+
+        const clothesTitle = document.createElement("strong");
+        clothesTitle.textContent = "👕 Одежда";
+
+        clothes.appendChild(clothesTitle);
+
+        const list = document.createElement("ul");
+
+        item.items.forEach(clothing => {
+
+          const li = document.createElement("li");
+          li.textContent = clothing;
+          list.appendChild(li);
+
+        });
+
+        clothes.appendChild(list);
+        category.appendChild(clothes);
+
+      } else {
+
+        const list = document.createElement("ul");
+
+        const li = document.createElement("li");
+        li.textContent = item.name || item;
+
+        list.appendChild(li);
+        category.appendChild(list);
+      }
+
+    });
+
+    result.appendChild(category);
+
+  });
+}
+
+
+function escapeHtml(text) {
+
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+
+}
+
+</script>
+
+</body>
+</html>
