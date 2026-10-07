@@ -1,315 +1,688 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Семейный сборщик в дорогу</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TravelMate AI</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #222;
-    }
+:root {
+  --bg: #07111f;
+  --bg2: #0b1b2f;
+  --card: #10243d;
+  --card2: #142c48;
+  --text: #f4f7fb;
+  --muted: #91a4bb;
+  --accent: #55d6ff;
+  --accent2: #7c6cff;
+  --green: #55e39a;
+  --border: rgba(255,255,255,0.08);
+}
 
-    .app {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, #123052 0%, var(--bg) 48%);
+  color: var(--text);
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+button,
+input {
+  font: inherit;
+}
 
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 15px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-    }
+button {
+  cursor: pointer;
+}
 
-    label {
-      display: block;
-      margin-top: 14px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
+.app {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+}
 
-    input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 16px;
-    }
+/* ---------- ОБЩИЕ ЭКРАНЫ ---------- */
 
-    .row {
-      display: flex;
-      gap: 10px;
-    }
+.screen {
+  min-height: 100vh;
+  padding: 20px 18px 30px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
 
-    .row > div {
-      flex: 1;
-    }
+.screen.active {
+  display: flex;
+  flex-direction: column;
+}
 
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 12px;
-      padding: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 20px;
-      background: #222;
-      color: white;
-    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    button:disabled {
-      opacity: 0.5;
-    }
+/* ---------- ЭКРАН 1 ---------- */
 
-    .loading {
-      text-align: center;
-      padding: 25px;
-      font-size: 18px;
-    }
+.utc {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
 
-    .category {
-      background: white;
-      border-radius: 16px;
-      margin-bottom: 15px;
-      padding: 18px;
-    }
+.logo {
+  text-align: center;
+  font-size: 29px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
 
-    .category h2 {
-      margin-top: 0;
-    }
+.logo span {
+  color: var(--accent);
+}
 
-    .category ul {
-      padding-left: 22px;
-    }
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 7px;
+  font-size: 14px;
+}
 
-    .category li {
-      margin: 10px 0;
-    }
+.trip-card {
+  margin-top: 32px;
+  padding: 22px;
+  border-radius: 26px;
+  background: linear-gradient(
+    145deg,
+    rgba(20,44,72,0.95),
+    rgba(9,26,46,0.95)
+  );
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
 
-    .clothes {
-      background: #f2f2f2;
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 10px;
-    }
+.trip-label {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 18px;
+}
 
-    .error {
-      background: #ffe5e5;
-      color: #a00000;
-      padding: 15px;
-      border-radius: 12px;
-      margin-top: 15px;
-    }
+.route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
 
-    .hidden {
-      display: none;
-    }
-  </style>
+.place {
+  flex: 1;
+}
+
+.place small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 5px;
+}
+
+.place input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  color: white;
+  background: transparent;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.arrow {
+  color: var(--accent);
+  font-size: 25px;
+}
+
+.date-row {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.info-box {
+  background: rgba(255,255,255,0.04);
+  padding: 13px;
+  border-radius: 15px;
+}
+
+.info-box small {
+  color: var(--muted);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.info-box input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  color: white;
+  outline: none;
+}
+
+.people {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.people .info-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.counter button {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  border: 0;
+  color: white;
+  background: rgba(255,255,255,0.10);
+}
+
+.counter span {
+  min-width: 15px;
+  text-align: center;
+}
+
+.main-button {
+  margin-top: auto;
+  margin-bottom: 12px;
+  width: 100%;
+  padding: 18px;
+  border: 0;
+  border-radius: 20px;
+  color: #06111d;
+  font-weight: 800;
+  font-size: 18px;
+  background: linear-gradient(135deg, var(--accent), #8ce9ff);
+  box-shadow: 0 10px 35px rgba(85,214,255,0.20);
+}
+
+.hint {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+/* ---------- ЭКРАН 2 ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.back {
+  border: 0;
+  background: rgba(255,255,255,0.07);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  font-size: 20px;
+}
+
+.top-title {
+  text-align: center;
+}
+
+.top-title strong {
+  display: block;
+  font-size: 18px;
+}
+
+.top-title small {
+  color: var(--muted);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+}
+
+.dashboard-card {
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #112c49, #0b1c31);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.dashboard-card small {
+  color: var(--muted);
+}
+
+.dashboard-route {
+  margin-top: 7px;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.dashboard-date {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.section-title {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 8px 3px 12px;
+}
+
+.icons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.icon-card {
+  min-height: 105px;
+  border: 1px solid var(--border);
+  border-radius: 21px;
+  background: rgba(16,36,61,0.82);
+  color: white;
+  padding: 14px 8px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.icon-card:active {
+  transform: scale(0.96);
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  margin: auto;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.07);
+  font-size: 25px;
+}
+
+.icon-card strong {
+  display: block;
+  margin-top: 9px;
+  font-size: 12px;
+}
+
+.ai-button {
+  margin-top: auto;
+  width: 100%;
+  padding: 17px;
+  border: 0;
+  border-radius: 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6c63ff, #4bbcff);
+  box-shadow: 0 12px 35px rgba(92,107,255,0.22);
+}
+
+.news {
+  margin-top: 18px;
+  padding: 13px 15px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.035);
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ---------- СООБЩЕНИЕ ---------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 25px;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 440px;
+  padding: 15px;
+  border-radius: 16px;
+  background: #162d48;
+  border: 1px solid var(--border);
+  text-align: center;
+  color: white;
+  display: none;
+  z-index: 20;
+}
+
+.toast.show {
+  display: block;
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <h1>🧳 Семейный сборщик в дорогу</h1>
+  <!-- ЭКРАН 1 -->
+  <section id="screen1" class="screen active">
 
-  <div id="formScreen" class="card">
-
-    <label>Откуда</label>
-    <input id="from" value="Калининград">
-
-    <label>Куда</label>
-    <input id="to" value="Гоа, Индия">
-
-    <label>На сколько дней</label>
-    <input id="days" type="number" value="90">
-
-    <div class="row">
-      <div>
-        <label>Взрослых</label>
-        <input id="adults" type="number" value="2" min="1">
-      </div>
-
-      <div>
-        <label>Детей</label>
-        <input id="children" type="number" value="3" min="0">
-      </div>
+    <div class="utc" id="utc">
+      UTC 00:00:00
     </div>
 
-    <button id="buildButton" onclick="buildPackingList()">
-      ✨ Собрать мой список
+    <div class="logo">
+      Travel<span>Mate</span> AI
+    </div>
+
+    <div class="subtitle">
+      Твой помощник в путешествии
+    </div>
+
+    <div class="trip-card">
+
+      <div class="trip-label">
+        Моя поездка
+      </div>
+
+      <div class="route">
+
+        <div class="place">
+          <small>ОТКУДА</small>
+          <input id="from" value="Калининград">
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="place">
+          <small>КУДА</small>
+          <input id="to" value="Гоа, Индия">
+        </div>
+
+      </div>
+
+      <div class="date-row">
+
+        <div class="info-box">
+          <small>ОТПРАВЛЕНИЕ</small>
+          <input id="dateFrom" type="date">
+        </div>
+
+        <div class="info-box">
+          <small>ДНЕЙ</small>
+          <input id="days" type="number" value="90" min="1">
+        </div>
+
+      </div>
+
+      <div class="people">
+
+        <div class="info-box">
+          <small>ВЗРОСЛЫЕ</small>
+
+          <div class="counter">
+            <button onclick="changePeople('adults', -1)">−</button>
+            <span id="adults">2</span>
+            <button onclick="changePeople('adults', 1)">+</button>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <small>ДЕТИ</small>
+
+          <div class="counter">
+            <button onclick="changePeople('children', -1)">−</button>
+            <span id="children">3</span>
+            <button onclick="changePeople('children', 1)">+</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button class="main-button" onclick="openTravelMate()">
+      ✦ TravelMate AI
     </button>
 
-  </div>
+    <div class="hint">
+      Один помощник для всей поездки
+    </div>
 
-  <div id="loading" class="loading hidden">
-    🤖 ИИ анализирует вашу поездку...
-  </div>
+  </section>
 
-  <div id="result"></div>
+
+  <!-- ЭКРАН 2 -->
+  <section id="screen2" class="screen">
+
+    <div class="topbar">
+
+      <button class="back" onclick="goBack()">
+        ←
+      </button>
+
+      <div class="top-title">
+        <strong>TravelMate AI</strong>
+        <small>Моя поездка</small>
+      </div>
+
+      <div class="avatar">
+        🌍
+      </div>
+
+    </div>
+
+    <div class="dashboard-card">
+
+      <small>МАРШРУТ</small>
+
+      <div class="dashboard-route" id="dashboardRoute">
+        Калининград → Гоа, Индия
+      </div>
+
+      <div class="dashboard-date" id="dashboardInfo">
+        90 дней • 2 взрослых • 3 детей
+      </div>
+
+    </div>
+
+    <div class="section-title">
+      Чем могу помочь?
+    </div>
+
+    <div class="icons">
+
+      <button class="icon-card" onclick="showMessage('🧳 Раздел багажа — следующим шагом подключим наш AI-сборщик.')">
+        <div class="icon">🧳</div>
+        <strong>Багаж</strong>
+      </button>
+
+      <button class="icon-card" onclick="showMessage('🌤 Погода будет показываться здесь.')">
+        <div class="icon">🌤️</div>
+        <strong>Погода</strong>
+      </button>
+
+      <button class="icon-card" onclick="showMessage('✈️ Здесь будут авиабилеты и другие варианты транспорта.')">
+        <div class="icon">✈️</div>
+        <strong>Билеты</strong>
+      </button>
+
+      <button class="icon-card" onclick="showMessage('🛂 Здесь TravelMate будет проверять документы и правила въезда.')">
+        <div class="icon">🛂</div>
+        <strong>Документы</strong>
+      </button>
+
+      <button class="icon-card" onclick="showMessage('💰 Здесь будут валюта, курс и полезные денежные подсказки.')">
+        <div class="icon">💰</div>
+        <strong>Деньги</strong>
+      </button>
+
+      <button class="icon-card" onclick="showMessage('📱 Здесь будут SIM, eSIM и интернет.')">
+        <div class="icon">📱</div>
+        <strong>Связь</strong>
+      </button>
+
+      <button class="icon-card" onclick="showMessage('📰 Здесь появятся важные события, которые могут повлиять на поездку.')">
+        <div class="icon">📰</div>
+        <strong>Важно</strong>
+      </button>
+
+      <button class="icon-card" onclick="showMessage('🏥 Здесь будут экстренные службы, больницы и полезные контакты.')">
+        <div class="icon">🏥</div>
+        <strong>Помощь</strong>
+      </button>
+
+      <button class="icon-card" onclick="showMessage('🗺️ Здесь будет маршрут и план поездки.')">
+        <div class="icon">🗺️</div>
+        <strong>Маршрут</strong>
+      </button>
+
+    </div>
+
+    <div class="news">
+      🛰️ TravelMate будет следить за тем, что важно именно для твоей поездки
+    </div>
+
+    <button class="ai-button" onclick="showMessage('🤖 AI-помощник скоро будет здесь. Сначала построим интерфейс, затем подключим мозг.')">
+      🤖 Спросить TravelMate
+    </button>
+
+  </section>
 
 </div>
 
+<div id="toast" class="toast"></div>
+
+
 <script>
 
-async function buildPackingList() {
+let people = {
+  adults: 2,
+  children: 3
+};
 
-  const button = document.getElementById("buildButton");
-  const loading = document.getElementById("loading");
-  const result = document.getElementById("result");
+function updateUTC() {
 
-  const trip = {
-    from: document.getElementById("from").value,
-    to: document.getElementById("to").value,
-    days: Number(document.getElementById("days").value),
-    adults: Number(document.getElementById("adults").value),
-    children: Number(document.getElementById("children").value)
-  };
+  const now = new Date();
 
-  button.disabled = true;
-  loading.classList.remove("hidden");
-  result.innerHTML = "";
+  const utc = new Date(
+    now.getTime() + now.getTimezoneOffset() * 60000
+  );
 
-  try {
+  const time =
+    utc.getUTCHours().toString().padStart(2, "0") + ":" +
+    utc.getUTCMinutes().toString().padStart(2, "0") + ":" +
+    utc.getUTCSeconds().toString().padStart(2, "0");
 
-    const response = await fetch("/api/packing", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(trip)
-    });
+  document.getElementById("utc").textContent =
+    "UTC " + time;
+}
 
-    const data = await response.json();
+setInterval(updateUTC, 1000);
+updateUTC();
 
-    if (!response.ok) {
-      throw new Error(data.error || "Ошибка сервера");
-    }
 
-    showResult(data.result);
+function changePeople(type, amount) {
 
-  } catch (error) {
+  people[type] += amount;
 
-    result.innerHTML = `
-      <div class="error">
-        ❌ ${escapeHtml(error.message)}
-      </div>
-    `;
-
-  } finally {
-
-    button.disabled = false;
-    loading.classList.add("hidden");
+  if (type === "adults" && people[type] < 1) {
+    people[type] = 1;
   }
+
+  if (type === "children" && people[type] < 0) {
+    people[type] = 0;
+  }
+
+  document.getElementById(type).textContent =
+    people[type];
 }
 
 
-function showResult(text) {
+function openTravelMate() {
 
-  const result = document.getElementById("result");
+  const from =
+    document.getElementById("from").value || "—";
 
-  let data;
+  const to =
+    document.getElementById("to").value || "—";
 
-  try {
-    data = JSON.parse(text);
-  } catch {
+  const days =
+    document.getElementById("days").value || "—";
 
-    result.innerHTML = `
-      <div class="category">
-        <h2>🤖 Ответ ИИ</h2>
-        <pre style="white-space:pre-wrap">${escapeHtml(text)}</pre>
-      </div>
-    `;
+  document.getElementById("dashboardRoute").textContent =
+    from + " → " + to;
 
-    return;
-  }
+  document.getElementById("dashboardInfo").textContent =
+    days + " дней • " +
+    people.adults + " взрослых • " +
+    people.children + " детей";
 
-  result.innerHTML = "";
+  document.getElementById("screen1").classList.remove("active");
+  document.getElementById("screen2").classList.add("active");
 
-  const categories = [
-    "Обязательно",
-    "Желательно",
-    "Было бы прикольно"
-  ];
-
-  categories.forEach(categoryName => {
-
-    const category = document.createElement("div");
-    category.className = "category";
-
-    const title = document.createElement("h2");
-    title.textContent = categoryName;
-
-    category.appendChild(title);
-
-    const items = data[categoryName] || [];
-
-    items.forEach(item => {
-
-      if (item.name === "Одежда" && Array.isArray(item.items)) {
-
-        const clothes = document.createElement("div");
-        clothes.className = "clothes";
-
-        const clothesTitle = document.createElement("strong");
-        clothesTitle.textContent = "👕 Одежда";
-
-        clothes.appendChild(clothesTitle);
-
-        const list = document.createElement("ul");
-
-        item.items.forEach(clothing => {
-
-          const li = document.createElement("li");
-          li.textContent = clothing;
-          list.appendChild(li);
-
-        });
-
-        clothes.appendChild(list);
-        category.appendChild(clothes);
-
-      } else {
-
-        const list = document.createElement("ul");
-
-        const li = document.createElement("li");
-        li.textContent = item.name || item;
-
-        list.appendChild(li);
-        category.appendChild(list);
-      }
-
-    });
-
-    result.appendChild(category);
-
-  });
+  window.scrollTo(0, 0);
 }
 
 
-function escapeHtml(text) {
+function goBack() {
 
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
+  document.getElementById("screen2").classList.remove("active");
+  document.getElementById("screen1").classList.add("active");
 
+  window.scrollTo(0, 0);
+}
+
+
+function showMessage(message) {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
 }
 
 </script>
