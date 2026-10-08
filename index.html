@@ -3,19 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>TravelMate AI</title>
 
 <style>
+
 :root {
-  --bg: #06111f;
-  --bg2: #0a1b30;
-  --card: #0d223a;
-  --card2: #122b47;
-  --text: #f5f7fa;
-  --muted: #8da0b7;
-  --accent: #55d8ff;
-  --accent2: #7382ff;
-  --line: rgba(255,255,255,.08);
+  --bg: #020b18;
+  --bg2: #061a31;
+  --card: rgba(13, 39, 69, 0.78);
+  --card2: rgba(17, 48, 82, 0.82);
+
+  --text: #f7f9fc;
+  --muted: #8ea8c4;
+  --soft: #b9cee2;
+
+  --blue: #42d8ff;
+  --blue2: #4ca8ff;
+  --purple: #654cff;
+
+  --border: rgba(130, 190, 255, 0.18);
+  --border2: rgba(255,255,255,0.08);
 }
 
 * {
@@ -23,43 +31,94 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html,
 body {
   margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 50% -15%, #173b63 0%, var(--bg) 48%);
-  color: var(--text);
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
     "SF Pro Display",
+    "SF Pro Text",
     "Segoe UI",
     Arial,
     sans-serif;
+
+  background:
+
+    radial-gradient(
+      circle at 50% -15%,
+      rgba(39,112,183,.42),
+      transparent 42%
+    ),
+
+    radial-gradient(
+      circle at 20% 70%,
+      rgba(23,78,130,.18),
+      transparent 40%
+    ),
+
+    #020b18;
+
+  color: var(--text);
+
+  min-height: 100vh;
 }
 
 button,
 input {
-  font: inherit;
+  font-family: inherit;
 }
 
 button {
   border: 0;
-  color: inherit;
-  cursor: pointer;
+  outline: none;
 }
 
+input {
+  outline: none;
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
 .app {
+
   width: 100%;
   max-width: 480px;
   min-height: 100vh;
+
   margin: auto;
+
+  position: relative;
+
+  overflow: hidden;
 }
 
+
+/* =====================================================
+   SCREEN
+===================================================== */
+
 .screen {
+
   min-height: 100vh;
-  padding: 7px 20px 28px;
+
+  padding:
+    10px
+    18px
+    30px;
+
   display: none;
+
+  position: relative;
 }
 
 .screen.active {
@@ -67,551 +126,1213 @@ button {
   flex-direction: column;
 }
 
-/* =========================
+
+/* =====================================================
    TOP BAR
-========================= */
+===================================================== */
 
-.top {
+.topbar {
+
   display: flex;
-  align-items: flex-start;
+
   justify-content: space-between;
-  min-height: 48px;
+  align-items: flex-start;
+
+  min-height: 65px;
+
+  position: relative;
+
+  z-index: 5;
 }
 
-.clock {
-  text-align: left;
-  line-height: 1.05;
+.time-block {
+
+  display: flex;
+  flex-direction: column;
+
+  line-height: 1.15;
 }
 
-.clock .time {
+.time {
+
   font-size: 15px;
+
   font-weight: 600;
+
+  letter-spacing: .1px;
 }
 
-.clock .date {
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 12px;
+.date {
+
+  margin-top: 7px;
+
+  font-size: 13px;
+
+  color: var(--soft);
 }
+
+.utc {
+
+  margin-top: 3px;
+
+  font-size: 12px;
+
+  color: var(--muted);
+}
+
 
 .brand {
-  margin-top: 1px;
-  font-size: 15px;
+
+  margin-top: 4px;
+
+  font-size: 17px;
+
   font-weight: 700;
-  letter-spacing: -.4px;
+
+  letter-spacing: -.5px;
 }
 
 .brand span {
-  color: var(--accent);
+  color: var(--blue);
 }
 
-/* =========================
-   HOME
-========================= */
+
+/* =====================================================
+   HOME TITLE
+===================================================== */
 
 .home-title {
-  margin-top: 34px;
-  margin-bottom: 18px;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -1px;
+
+  margin-top: 45px;
+
+  font-size: 39px;
+
+  font-weight: 500;
+
+  letter-spacing: -1.8px;
 }
+
+
+/* =====================================================
+   NEW TRIP CARD
+===================================================== */
 
 .trip-card {
-  background: rgba(13,34,58,.94);
-  border: 1px solid var(--line);
-  border-radius: 27px;
-  padding: 21px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.24);
+
+  margin-top: 25px;
+
+  padding: 23px 17px 17px;
+
+  border-radius: 29px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(18,54,91,.86),
+      rgba(8,28,51,.88)
+    );
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.035),
+    0 25px 70px rgba(0,0,0,.25);
 }
 
-.label {
-  display: block;
-  margin-bottom: 7px;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.4px;
-}
+
+/* =====================================================
+   ROUTE
+===================================================== */
 
 .route {
+
   display: grid;
-  grid-template-columns: 1fr 28px 1fr;
+
+  grid-template-columns:
+    1fr
+    30px
+    1fr;
+
   align-items: end;
-  gap: 7px;
+
+  gap: 6px;
+}
+
+.route-block {
+  min-width: 0;
+}
+
+.field-label {
+
+  display: block;
+
+  margin-bottom: 9px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  color: var(--soft);
+
+  letter-spacing: .8px;
+}
+
+.route-input {
+
+  width: 100%;
+
+  border: 0;
+
+  background: transparent;
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  padding: 0;
+
+  min-width: 0;
 }
 
 .route-arrow {
-  color: var(--accent);
+
+  color: var(--blue);
+
+  font-size: 27px;
+
   text-align: center;
-  font-size: 22px;
-  padding-bottom: 4px;
+
+  padding-bottom: 1px;
 }
 
-input {
-  width: 100%;
-  border: 0;
-  outline: none;
-  background: transparent;
-  color: var(--text);
-}
 
-.route input {
-  font-size: 18px;
-  font-weight: 700;
-  padding: 0;
-}
+/* =====================================================
+   FORM ROW
+===================================================== */
 
-.form-grid {
-  margin-top: 20px;
+.form-row {
+
   display: grid;
-  grid-template-columns: 1.15fr .85fr;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
   gap: 10px;
+
+  margin-top: 22px;
 }
 
-.field {
-  padding: 13px 14px;
-  border-radius: 17px;
-  background: rgba(255,255,255,.045);
+.field-card {
+
+  min-height: 80px;
+
+  padding: 13px 15px;
+
+  border-radius: 20px;
+
+  background:
+    rgba(25,62,99,.63);
+
+  border:
+    1px solid rgba(112,176,232,.11);
 }
 
-.field input {
-  font-size: 15px;
+.field-value {
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  width: 100%;
+
+  border: 0;
+
+  background: transparent;
+}
+
+.field-value[type="date"] {
+  color-scheme: dark;
+}
+
+.field-value[type="number"] {
+  appearance: textfield;
+}
+
+.field-value::-webkit-inner-spin-button {
+  display: none;
+}
+
+
+/* =====================================================
+   PEOPLE
+===================================================== */
+
+.people-row {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.people-card {
+
+  min-height: 105px;
+
+  padding: 13px 15px;
+
+  border-radius: 20px;
+
+  background:
+    rgba(25,62,99,.63);
+
+  border:
+    1px solid rgba(112,176,232,.11);
+}
+
+.people-bottom {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-top: 9px;
+}
+
+.people-number {
+
+  font-size: 20px;
+
   font-weight: 600;
 }
 
-.people-grid {
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.people-box {
-  padding: 13px 14px;
-  border-radius: 17px;
-  background: rgba(255,255,255,.045);
-}
-
-.people-control {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .counter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
-.counter span {
-  min-width: 18px;
-  text-align: center;
-  font-size: 17px;
-  font-weight: 700;
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
 }
 
 .counter button {
-  width: 30px;
-  height: 30px;
+
+  width: 31px;
+  height: 31px;
+
   border-radius: 50%;
-  background: rgba(255,255,255,.08);
+
+  background:
+    rgba(255,255,255,.09);
+
+  color: white;
+
   font-size: 20px;
+
+  line-height: 1;
 }
 
-.search-button,
-.ask-button {
-  width: 100%;
-  padding: 17px;
-  border-radius: 19px;
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.search-button {
-  margin-top: 15px;
-  background: linear-gradient(135deg,var(--accent),#83e6ff);
-  color: #06111f;
-  box-shadow: 0 10px 30px rgba(85,216,255,.18);
-}
-
-/* =========================
-   SAVED TRIPS
-========================= */
-
-.saved-section {
-  margin-top: 25px;
-}
-
-.section-label {
-  margin: 0 3px 11px;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-}
-
-.saved-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.saved-trip {
-  width: 100%;
-  min-height: 62px;
-  padding: 12px 12px 12px 15px;
-  border-radius: 17px;
-  background: rgba(255,255,255,.045);
-  border: 1px solid rgba(255,255,255,.045);
-  text-align: left;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.saved-main {
-  min-width: 0;
-}
-
-.saved-route {
-  font-size: 14px;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.saved-info {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-.saved-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: 8px;
-  flex-shrink: 0;
-}
-
-.saved-arrow {
-  color: #71849a;
-  font-size: 18px;
-}
-
-.delete-trip {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9px;
-  background: transparent;
-  color: #71849a;
-}
-
-.delete-trip:active {
-  background: rgba(255,255,255,.08);
-  color: #ff6b6b;
-}
-
-.delete-trip svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.empty {
-  color: var(--muted);
-  font-size: 13px;
-  padding: 5px 3px;
-}
-
-/* =========================
-   TRAVELMATE SCREEN
-========================= */
-
-.screen2 {
-  padding-top: 7px;
-}
-
-.trip-header {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  margin-top: 12px;
-}
-
-.back-button {
-  flex: 0 0 42px;
-  width: 42px;
-  height: 42px;
-  border-radius: 15px;
-  background: rgba(255,255,255,.07);
-  font-size: 21px;
-}
-
-.current-trip {
-  min-width: 0;
-  padding: 0;
-}
-
-.current-route {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -.3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.current-info {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-/* =========================
-   IOS STYLE ICONS
-========================= */
-
-.icon-grid {
-  margin-top: 27px;
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  row-gap: 25px;
-  column-gap: 10px;
-}
-
-.icon-button {
-  background: transparent;
-  text-align: center;
-  padding: 2px;
-}
-
-.icon-button:active {
+.counter button:active {
   transform: scale(.91);
 }
 
-.icon-symbol {
-  width: 52px;
-  height: 52px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #dce9f5;
-}
+.children-info {
 
-.icon-symbol svg {
-  width: 31px;
-  height: 31px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.55;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+  margin-top: 5px;
 
-.icon-name {
-  display: block;
-  margin-top: 7px;
-  color: #dce5ef;
+  color: var(--muted);
+
   font-size: 11px;
 }
 
-/* =========================
-   ASK BUTTON
-========================= */
 
-.ask-button {
-  margin-top: auto;
-  background: linear-gradient(135deg,#6672ff,#4fcfff);
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-button {
+
+  width: 100%;
+
+  height: 61px;
+
+  margin-top: 15px;
+
+  border-radius: 31px;
+
+  background:
+
+    linear-gradient(
+      105deg,
+      #13c9f4,
+      #467fff 60%,
+      #704cff
+    );
+
   color: white;
-  box-shadow: 0 12px 35px rgba(90,100,255,.18);
+
+  font-size: 18px;
+
+  font-weight: 600;
+
+  box-shadow:
+    0 12px 35px rgba(45,129,255,.25);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 12px;
 }
 
-/* =========================
+.search-button:active {
+  transform: scale(.98);
+}
+
+.search-icon {
+
+  width: 25px;
+  height: 25px;
+
+  border: 3px solid white;
+
+  border-radius: 50%;
+
+  position: relative;
+}
+
+.search-icon::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 9px;
+  height: 3px;
+
+  background: white;
+
+  right: -7px;
+  bottom: -3px;
+
+  transform: rotate(45deg);
+
+  border-radius: 3px;
+}
+
+
+/* =====================================================
+   SAVED TRIPS
+===================================================== */
+
+.saved-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-top: 33px;
+
+  margin-bottom: 10px;
+}
+
+.saved-title {
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #92b5d6;
+
+  letter-spacing: 1px;
+}
+
+.view-all {
+
+  font-size: 12px;
+
+  color: #8fb1d1;
+}
+
+.saved-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.saved-trip {
+
+  min-height: 82px;
+
+  padding: 10px 11px;
+
+  border-radius: 19px;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(17,49,82,.78),
+      rgba(9,31,54,.75)
+    );
+
+  border:
+    1px solid rgba(107,175,235,.13);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  color: white;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.saved-trip:active {
+  transform: scale(.985);
+}
+
+.trip-thumb {
+
+  width: 66px;
+  height: 61px;
+
+  flex-shrink: 0;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  position: relative;
+
+  background:
+    linear-gradient(
+      150deg,
+      #27b8dc,
+      #0671a7 45%,
+      #f0a84c 46%,
+      #f8d58b 64%,
+      #1495b5 65%
+    );
+}
+
+.trip-thumb::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 25px;
+  height: 40px;
+
+  left: 9px;
+  top: 4px;
+
+  background: #15724d;
+
+  border-radius: 100% 0 100% 0;
+
+  transform: rotate(-25deg);
+}
+
+.trip-thumb::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 75px;
+  height: 25px;
+
+  left: -3px;
+  bottom: 0;
+
+  background:
+    rgba(255,255,255,.27);
+
+  border-radius: 50%;
+}
+
+.saved-content {
+
+  min-width: 0;
+
+  flex: 1;
+}
+
+.saved-route {
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.saved-meta {
+
+  margin-top: 6px;
+
+  color: #8ea9c3;
+
+  font-size: 11px;
+}
+
+.saved-arrow {
+
+  color: #87a7c5;
+
+  font-size: 27px;
+
+  padding-right: 3px;
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+.delete-button {
+
+  width: 37px;
+  height: 37px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(255,255,255,.055);
+
+  color: #a9bfd3;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.delete-button svg {
+
+  width: 18px;
+  height: 18px;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.6;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+}
+
+.delete-button:active {
+  color: #ff7373;
+}
+
+
+/* =====================================================
+   SECOND SCREEN
+===================================================== */
+
+.screen2 {
+
+  padding-top: 10px;
+}
+
+.screen2 .topbar {
+  min-height: 61px;
+}
+
+.trip-top {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 6px;
+}
+
+.back-button {
+
+  width: 49px;
+  height: 49px;
+
+  flex-shrink: 0;
+
+  border-radius: 17px;
+
+  background:
+    rgba(38,78,116,.68);
+
+  color: white;
+
+  font-size: 30px;
+
+  line-height: 1;
+}
+
+.back-button:active {
+  transform: scale(.94);
+}
+
+.current-trip {
+
+  min-width: 0;
+
+  flex: 1;
+}
+
+.current-route {
+
+  font-size: 17px;
+
+  font-weight: 650;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.current-meta {
+
+  margin-top: 6px;
+
+  font-size: 11px;
+
+  color: var(--muted);
+}
+
+
+/* =====================================================
+   ICON GRID
+===================================================== */
+
+.icon-grid {
+
+  margin-top: 27px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 18px 10px;
+}
+
+.app-icon {
+
+  min-height: 119px;
+
+  border-radius: 22px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(18,53,88,.91),
+      rgba(8,31,54,.92)
+    );
+
+  border:
+    1px solid rgba(101,170,229,.15);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  color: white;
+}
+
+.app-icon:active {
+  transform: scale(.94);
+}
+
+.icon {
+
+  width: 51px;
+  height: 51px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  color: #9cd5ff;
+}
+
+.icon svg {
+
+  width: 39px;
+  height: 39px;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.45;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+
+  filter:
+    drop-shadow(
+      0 0 7px rgba(82,192,255,.13)
+    );
+}
+
+.icon-label {
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  color: #f4f7fb;
+}
+
+
+/* =====================================================
+   ASK TRAVELMATE
+===================================================== */
+
+.ask-button {
+
+  width: 100%;
+
+  height: 61px;
+
+  margin-top: 25px;
+
+  border-radius: 31px;
+
+  background:
+
+    linear-gradient(
+      105deg,
+      #11c8f3,
+      #4b83ff 60%,
+      #714cff
+    );
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  box-shadow:
+    0 12px 35px rgba(45,129,255,.22);
+}
+
+.ask-star {
+  font-size: 23px;
+}
+
+.ask-button:active {
+  transform: scale(.98);
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 100;
+
+  display: none;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  padding: 15px;
+
+  background:
+    rgba(0,6,15,.68);
+
+  backdrop-filter: blur(13px);
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-card {
+
+  width: 100%;
+
+  max-width: 470px;
+
+  max-height: 88vh;
+
+  overflow-y: auto;
+
+  padding: 23px;
+
+  border-radius: 29px;
+
+  background:
+    linear-gradient(
+      150deg,
+      #102d4b,
+      #071a2e
+    );
+
+  border:
+    1px solid var(--border);
+
+  box-shadow:
+    0 -15px 70px rgba(0,0,0,.4);
+}
+
+.modal-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.modal-title {
+
+  font-size: 22px;
+
+  font-weight: 700;
+}
+
+.close {
+
+  width: 37px;
+  height: 37px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,.07);
+
+  color: white;
+
+  font-size: 23px;
+}
+
+.loading {
+
+  padding: 45px 0;
+
+  text-align: center;
+
+  color: var(--muted);
+}
+
+.spinner {
+
+  width: 31px;
+  height: 31px;
+
+  margin: 0 auto 17px;
+
+  border:
+    3px solid rgba(255,255,255,.1);
+
+  border-top-color:
+    var(--blue);
+
+  border-radius: 50%;
+
+  animation:
+    spin .8s linear infinite;
+}
+
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.result {
+
+  margin-top: 20px;
+}
+
+.result-category {
+
+  margin-bottom: 22px;
+}
+
+.result-title {
+
+  color: var(--blue);
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  margin-bottom: 9px;
+}
+
+.result-subtitle {
+
+  margin-top: 11px;
+  margin-bottom: 5px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.result-item {
+
+  padding: 9px 0;
+
+  border-bottom:
+    1px solid var(--border2);
+
+  color: #dbe7f1;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
    TOAST
-========================= */
+===================================================== */
 
 .toast {
+
   position: fixed;
-  z-index: 500;
+
   left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
+
+  bottom: 25px;
+
+  transform:
+    translateX(-50%);
+
+  width:
+    calc(100% - 40px);
+
   max-width: 440px;
-  padding: 15px 17px;
+
+  padding: 14px 17px;
+
   border-radius: 17px;
-  background: #162c46;
-  border: 1px solid var(--line);
+
+  background:
+    #17334f;
+
+  border:
+    1px solid var(--border);
+
   color: white;
+
   text-align: center;
+
   font-size: 13px;
+
   display: none;
+
+  z-index: 300;
 }
 
 .toast.show {
   display: block;
 }
 
-/* =========================
-   PACKING MODAL
-========================= */
 
-.packing-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  display: none;
-  background: rgba(2,8,16,.72);
-  backdrop-filter: blur(12px);
-  padding: 18px;
+/* =====================================================
+   EARTH EFFECT
+===================================================== */
+
+.earth {
+
+  position: absolute;
+
+  left: -20%;
+
+  right: -20%;
+
+  bottom: -110px;
+
+  height: 230px;
+
+  border-radius:
+    50% 50% 0 0;
+
+  background:
+
+    radial-gradient(
+      ellipse at 50% 20%,
+      rgba(54,179,235,.28),
+      rgba(8,66,110,.16) 35%,
+      transparent 65%
+    );
+
+  box-shadow:
+    0 -8px 45px
+    rgba(57,191,255,.16);
+
+  pointer-events: none;
 }
 
-.packing-modal.active {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
+.earth::after {
 
-.packing-panel {
-  width: 100%;
-  max-width: 480px;
-  max-height: 86vh;
-  overflow-y: auto;
-  background: #0c1d31;
-  border: 1px solid var(--line);
-  border-radius: 28px 28px 18px 18px;
-  padding: 22px;
-  box-shadow: 0 -15px 60px rgba(0,0,0,.4);
-}
+  content: "";
 
-.packing-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  position: absolute;
 
-.packing-title {
-  font-size: 22px;
-  font-weight: 800;
-}
+  left: 10%;
+  right: 10%;
+  top: 28px;
 
-.packing-subtitle {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 12px;
-}
+  height: 80px;
 
-.packing-close {
-  width: 36px;
-  height: 36px;
   border-radius: 50%;
-  background: rgba(255,255,255,.07);
-  font-size: 24px;
+
+  border-top:
+    2px solid rgba(100,220,255,.2);
+
+  filter:
+    blur(1px);
 }
 
-.packing-loading {
-  padding: 45px 10px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
-}
 
-.loader {
-  width: 30px;
-  height: 30px;
-  margin: 0 auto 16px;
-  border: 3px solid rgba(255,255,255,.12);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
+/* =====================================================
+   MOBILE
+===================================================== */
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@media (max-width: 370px) {
 
-.packing-result {
-  margin-top: 22px;
-}
-
-.packing-category {
-  margin-bottom: 20px;
-}
-
-.packing-category-title {
-  margin-bottom: 9px;
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.packing-subcategory {
-  margin-top: 12px;
-  margin-bottom: 5px;
-  color: white;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.packing-item {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
-  color: #e4ebf3;
-  font-size: 14px;
-}
-
-/* =========================
-   SMALL SCREENS
-========================= */
-
-@media (max-height:700px) {
+  .screen {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
 
   .home-title {
-    margin-top: 18px;
+    font-size: 34px;
   }
 
-  .icon-grid {
-    margin-top: 18px;
-    row-gap: 14px;
+  .app-icon {
+    min-height: 108px;
   }
 
-  .saved-section {
-    margin-top: 17px;
+  .icon {
+    width: 44px;
+    height: 44px;
   }
+
+  .icon svg {
+    width: 35px;
+    height: 35px;
+  }
+
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="app">
 
-<!-- ==================================================
-     HOME SCREEN
-================================================== -->
 
-<section id="home" class="screen active">
+<!-- =====================================================
+     HOME
+===================================================== -->
 
-  <div class="top">
+<section
+  id="home"
+  class="screen active">
 
-    <div class="clock">
-      <div class="time" id="time">UTC 00:00:00</div>
-      <div class="date" id="date">01 Jan 2026</div>
+
+  <div class="topbar">
+
+    <div class="time-block">
+
+      <div
+        id="localTime"
+        class="time">
+        00:00
+      </div>
+
+      <div
+        id="localDate"
+        class="date">
+        01 Jan 2026
+      </div>
+
+      <div
+        id="utcTime"
+        class="utc">
+        UTC 00:00
+      </div>
+
     </div>
 
+
     <div class="brand">
-      TravelMate <span>AI</span>
+      Travel<span>Mate</span> AI
     </div>
 
   </div>
@@ -624,42 +1345,74 @@ input {
 
   <div class="trip-card">
 
+
+    <!-- ROUTE -->
+
     <div class="route">
 
-      <div>
-        <span class="label">FROM</span>
-        <input id="from" value="Kaliningrad">
+      <div class="route-block">
+
+        <span class="field-label">
+          ◉ FROM
+        </span>
+
+        <input
+          id="from"
+          class="route-input"
+          value="Kaliningrad">
+
       </div>
 
-      <div class="route-arrow">→</div>
 
-      <div>
-        <span class="label">TO</span>
-        <input id="to" value="Goa, India">
+      <div class="route-arrow">
+        →
+      </div>
+
+
+      <div class="route-block">
+
+        <span class="field-label">
+          ◉ TO
+        </span>
+
+        <input
+          id="to"
+          class="route-input"
+          value="Goa, India">
+
       </div>
 
     </div>
 
 
-    <div class="form-grid">
+    <!-- DATE + DAYS -->
 
-      <div class="field">
+    <div class="form-row">
 
-        <span class="label">DATE</span>
+
+      <div class="field-card">
+
+        <span class="field-label">
+          DATE
+        </span>
 
         <input
           id="tripDate"
+          class="field-value"
           type="date">
 
       </div>
 
 
-      <div class="field">
+      <div class="field-card">
 
-        <span class="label">DAYS</span>
+        <span class="field-label">
+          DAYS
+        </span>
 
         <input
           id="days"
+          class="field-value"
           type="number"
           min="1"
           value="90">
@@ -669,13 +1422,24 @@ input {
     </div>
 
 
-    <div class="people-grid">
+    <!-- PEOPLE -->
 
-      <div class="people-box">
+    <div class="people-row">
 
-        <span class="label">ADULTS</span>
 
-        <div class="people-control">
+      <div class="people-card">
+
+        <span class="field-label">
+          ADULTS
+        </span>
+
+        <div class="people-bottom">
+
+          <div
+            id="adults"
+            class="people-number">
+            2
+          </div>
 
           <div class="counter">
 
@@ -683,8 +1447,6 @@ input {
               onclick="changePeople('adults',-1)">
               −
             </button>
-
-            <span id="adults">2</span>
 
             <button
               onclick="changePeople('adults',1)">
@@ -698,11 +1460,19 @@ input {
       </div>
 
 
-      <div class="people-box">
+      <div class="people-card">
 
-        <span class="label">CHILDREN</span>
+        <span class="field-label">
+          CHILDREN
+        </span>
 
-        <div class="people-control">
+        <div class="people-bottom">
+
+          <div
+            id="children"
+            class="people-number">
+            3
+          </div>
 
           <div class="counter">
 
@@ -710,8 +1480,6 @@ input {
               onclick="changePeople('children',-1)">
               −
             </button>
-
-            <span id="children">3</span>
 
             <button
               onclick="changePeople('children',1)">
@@ -722,67 +1490,107 @@ input {
 
         </div>
 
+        <div class="children-info">
+          Family trip
+        </div>
+
       </div>
 
     </div>
 
 
+    <!-- SEARCH -->
+
     <button
       class="search-button"
       onclick="createTrip()">
 
-      SEARCH
+      <span class="search-icon"></span>
+
+      Search
 
     </button>
 
   </div>
 
 
-  <div class="saved-section">
+  <!-- SAVED -->
 
-    <div class="section-label">
+  <div class="saved-header">
+
+    <div class="saved-title">
       SAVED TRIPS
     </div>
 
-    <div
-      id="savedTrips"
-      class="saved-list">
+    <div class="view-all">
+      View all ›
     </div>
 
   </div>
+
+
+  <div
+    id="savedTrips"
+    class="saved-list">
+  </div>
+
+
+  <div class="earth"></div>
 
 </section>
 
 
-<!-- ==================================================
-     TRAVELMATE SCREEN
-================================================== -->
+<!-- =====================================================
+     SECOND SCREEN
+===================================================== -->
 
-<section id="travelmate" class="screen screen2">
+<section
+  id="travelmate"
+  class="screen screen2">
 
-  <div class="top">
 
-    <div class="clock">
-      <div class="time" id="time2">UTC 00:00:00</div>
-      <div class="date" id="date2">01 Jan 2026</div>
+  <div class="topbar">
+
+    <div class="time-block">
+
+      <div
+        id="localTime2"
+        class="time">
+        00:00
+      </div>
+
+      <div
+        id="localDate2"
+        class="date">
+        01 Jan 2026
+      </div>
+
+      <div
+        id="utcTime2"
+        class="utc">
+        UTC 00:00
+      </div>
+
     </div>
 
+
     <div class="brand">
-      TravelMate <span>AI</span>
+      Travel<span>Mate</span> AI
     </div>
 
   </div>
 
 
-  <!-- Back + route on same line -->
+  <!-- ROUTE HEADER -->
 
-  <div class="trip-header">
+  <div class="trip-top">
+
 
     <button
       class="back-button"
       onclick="goHome()">
 
-      ←
+      ‹
 
     </button>
 
@@ -790,16 +1598,16 @@ input {
     <div class="current-trip">
 
       <div
-        class="current-route"
-        id="currentRoute">
+        id="currentRoute"
+        class="current-route">
 
         Kaliningrad → Goa, India
 
       </div>
 
       <div
-        class="current-info"
-        id="currentInfo">
+        id="currentMeta"
+        class="current-meta">
 
         90 days · 2 adults · 3 children
 
@@ -810,9 +1618,7 @@ input {
   </div>
 
 
-  <!-- ==================================================
-       ICON GRID
-  ================================================== -->
+  <!-- ICONS -->
 
   <div class="icon-grid">
 
@@ -820,25 +1626,36 @@ input {
     <!-- PACKING -->
 
     <button
-      class="icon-button"
+      class="app-icon"
       onclick="openPacking()">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <path d="M6 7h12l1 14H5L6 7z"/>
-          <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
-          <path d="M9 11v6"/>
-          <path d="M15 11v6"/>
+          <rect
+            x="5"
+            y="7"
+            width="14"
+            height="14"
+            rx="2"/>
+
+          <path
+            d="M9 7V5a3 3 0 0 1 6 0v2"/>
+
+          <path
+            d="M9 11v6"/>
+
+          <path
+            d="M15 11v6"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Packing
-      </span>
+      </div>
 
     </button>
 
@@ -846,26 +1663,34 @@ input {
     <!-- WEATHER -->
 
     <button
-      class="icon-button"
-      onclick="featureMessage('Weather')">
+      class="app-icon"
+      onclick="feature('Weather')">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <circle cx="9" cy="14" r="4"/>
-          <path d="M13 14h3a4 4 0 0 0 0-8 5 5 0 0 0-9-1"/>
-          <path d="M17 16v4"/>
-          <path d="M20 17l-2 3"/>
-          <path d="M14 17l2 3"/>
+          <circle
+            cx="9"
+            cy="14"
+            r="4"/>
+
+          <path
+            d="M13 14h3a4 4 0 0 0 0-8 5 5 0 0 0-9-1"/>
+
+          <path d="M17 17v4"/>
+
+          <path d="M14.5 18.5l-2 2"/>
+
+          <path d="M19.5 18.5l2 2"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Weather
-      </span>
+      </div>
 
     </button>
 
@@ -873,23 +1698,26 @@ input {
     <!-- TICKETS -->
 
     <button
-      class="icon-button"
-      onclick="featureMessage('Tickets')">
+      class="app-icon"
+      onclick="feature('Tickets')">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <path d="M3 8a2 2 0 0 0 0 4 2 2 0 0 0 0 4v3h18v-3a2 2 0 0 0 0-4 2 2 0 0 0-2-4V5H3v3z"/>
-          <path d="M13 5v14"/>
+          <path
+            d="M4 7h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4V7z"/>
+
+          <path
+            d="M12 7v12"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Tickets
-      </span>
+      </div>
 
     </button>
 
@@ -897,25 +1725,36 @@ input {
     <!-- DOCUMENTS -->
 
     <button
-      class="icon-button"
-      onclick="featureMessage('Documents')">
+      class="app-icon"
+      onclick="feature('Documents')">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <path d="M6 3h9l4 4v14H6z"/>
-          <path d="M15 3v5h4"/>
-          <path d="M9 13h6"/>
-          <path d="M9 17h6"/>
+          <rect
+            x="6"
+            y="3"
+            width="12"
+            height="18"
+            rx="2"/>
+
+          <path
+            d="M9 7h6"/>
+
+          <path
+            d="M9 11h6"/>
+
+          <path
+            d="M9 15h4"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Documents
-      </span>
+      </div>
 
     </button>
 
@@ -923,24 +1762,38 @@ input {
     <!-- MONEY -->
 
     <button
-      class="icon-button"
-      onclick="featureMessage('Money')">
+      class="app-icon"
+      onclick="feature('Money')">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M14.5 8.5c-.7-.7-1.7-1-2.7-1-1.6 0-2.8.8-2.8 2s1 1.8 2.8 2.2c1.8.4 2.8 1 2.8 2.2s-1.2 2-2.8 2c-1.1 0-2.2-.4-2.9-1.1"/>
-          <path d="M12 5.5v13"/>
+          <rect
+            x="3"
+            y="6"
+            width="18"
+            height="12"
+            rx="2"/>
+
+          <circle
+            cx="12"
+            cy="12"
+            r="3"/>
+
+          <path
+            d="M6 9h.01"/>
+
+          <path
+            d="M18 15h.01"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Money
-      </span>
+      </div>
 
     </button>
 
@@ -948,24 +1801,35 @@ input {
     <!-- MOBILE -->
 
     <button
-      class="icon-button"
-      onclick="featureMessage('Mobile')">
+      class="app-icon"
+      onclick="feature('Mobile')">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <rect x="6" y="2.5" width="12" height="19" rx="2"/>
-          <path d="M10 5h4"/>
-          <circle cx="12" cy="18.5" r=".8"/>
+          <rect
+            x="6"
+            y="2"
+            width="12"
+            height="20"
+            rx="2.5"/>
+
+          <path
+            d="M10 5h4"/>
+
+          <circle
+            cx="12"
+            cy="18.5"
+            r=".8"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Mobile
-      </span>
+      </div>
 
     </button>
 
@@ -973,23 +1837,26 @@ input {
     <!-- ALERTS -->
 
     <button
-      class="icon-button"
-      onclick="featureMessage('Alerts')">
+      class="app-icon"
+      onclick="feature('Alerts')">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-          <path d="M10 21h4"/>
+          <path
+            d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+
+          <path
+            d="M10 21h4"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Alerts
-      </span>
+      </div>
 
     </button>
 
@@ -997,24 +1864,31 @@ input {
     <!-- HELP -->
 
     <button
-      class="icon-button"
-      onclick="featureMessage('Help')">
+      class="app-icon"
+      onclick="feature('Help')">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M9.5 9a2.6 2.6 0 1 1 4.7 1.6c-.8 1-2.2 1.2-2.2 2.8"/>
-          <path d="M12 17h.01"/>
+          <circle
+            cx="12"
+            cy="12"
+            r="9"/>
+
+          <path
+            d="M9.5 9a2.6 2.6 0 1 1 4.7 1.6c-.8 1-2.2 1.2-2.2 2.8"/>
+
+          <path
+            d="M12 17h.01"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Help
-      </span>
+      </div>
 
     </button>
 
@@ -1022,24 +1896,29 @@ input {
     <!-- ROUTE -->
 
     <button
-      class="icon-button"
-      onclick="featureMessage('Route')">
+      class="app-icon"
+      onclick="feature('Route')">
 
-      <div class="icon-symbol">
+      <div class="icon">
 
         <svg viewBox="0 0 24 24">
 
-          <circle cx="7" cy="17" r="2"/>
-          <circle cx="17" cy="7" r="2"/>
-          <path d="M8.5 15.5c2-2 2-5 4-7s3-1.5 3-1.5"/>
+          <path
+            d="M4 6l6-2 4 2 6-2v14l-6 2-4-2-6 2z"/>
+
+          <path
+            d="M10 4v14"/>
+
+          <path
+            d="M14 6v14"/>
 
         </svg>
 
       </div>
 
-      <span class="icon-name">
+      <div class="icon-label">
         Route
-      </span>
+      </div>
 
     </button>
 
@@ -1047,64 +1926,70 @@ input {
   </div>
 
 
+  <!-- ASK -->
+
   <button
     class="ask-button"
     onclick="askTravelMate()">
 
-    ASK TRAVELMATE
+    <span class="ask-star">
+      ✦
+    </span>
+
+    Ask TravelMate
 
   </button>
 
 
-  <div class="saved-section">
+  <!-- SAVED AGAIN -->
 
-    <div class="section-label">
+  <div class="saved-header">
+
+    <div class="saved-title">
       SAVED TRIPS
     </div>
 
-    <div
-      id="savedTrips2"
-      class="saved-list">
+    <div class="view-all">
+      View all ›
     </div>
 
   </div>
+
+
+  <div
+    id="savedTrips2"
+    class="saved-list">
+  </div>
+
 
 </section>
 
 </div>
 
 
-<!-- ==================================================
-     PACKING AI WINDOW
-================================================== -->
+<!-- =====================================================
+     PACKING MODAL
+===================================================== -->
 
 <div
   id="packingModal"
-  class="packing-modal">
+  class="modal">
 
-  <div class="packing-panel">
+  <div class="modal-card">
 
-    <div class="packing-top">
+
+    <div class="modal-header">
 
       <div>
 
-        <div class="packing-title">
+        <div class="modal-title">
           Packing
-        </div>
-
-        <div
-          class="packing-subtitle"
-          id="packingTrip">
-
-          Your trip
-
         </div>
 
       </div>
 
-
       <button
-        class="packing-close"
+        class="close"
         onclick="closePacking()">
 
         ×
@@ -1116,26 +2001,28 @@ input {
 
     <div
       id="packingLoading"
-      class="packing-loading">
+      class="loading">
 
-      <div class="loader"></div>
+      <div class="spinner"></div>
 
-      <div>
-        TravelMate is analyzing your trip...
-      </div>
+      TravelMate is analyzing your trip...
 
     </div>
 
 
     <div
       id="packingResult"
-      class="packing-result">
+      class="result">
     </div>
 
   </div>
 
 </div>
 
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
 
 <div
   id="toast"
@@ -1145,104 +2032,202 @@ input {
 
 <script>
 
-/* ==================================================
+/* =====================================================
    STATE
-================================================== */
+===================================================== */
 
 let people = {
+
   adults: 2,
+
   children: 3
+
 };
 
 let currentTrip = null;
 
 
-/* ==================================================
+/* =====================================================
+   DEFAULT DATE
+===================================================== */
+
+const today =
+  new Date();
+
+const yyyy =
+  today.getFullYear();
+
+const mm =
+  String(
+    today.getMonth() + 1
+  ).padStart(2,"0");
+
+const dd =
+  String(
+    today.getDate()
+  ).padStart(2,"0");
+
+document.getElementById(
+  "tripDate"
+).value =
+  `${yyyy}-${mm}-${dd}`;
+
+
+/* =====================================================
    CLOCK
-================================================== */
+===================================================== */
 
 function updateClock() {
 
-  const now = new Date();
+  const now =
+    new Date();
+
+
+  const localTime =
+    now.toLocaleTimeString(
+      "en-GB",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+
+
+  const localDate =
+    now.toLocaleDateString(
+      "en-GB",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      }
+    );
+
 
   const utcTime =
-    now.toLocaleTimeString("en-GB", {
-      timeZone: "UTC",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
+    now.toLocaleTimeString(
+      "en-GB",
+      {
+        timeZone: "UTC",
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
 
-  const utcDate =
-    now.toLocaleDateString("en-GB", {
-      timeZone: "UTC",
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    });
 
-  document.getElementById("time").textContent =
+  document.getElementById(
+    "localTime"
+  ).textContent =
+    localTime;
+
+
+  document.getElementById(
+    "localDate"
+  ).textContent =
+    localDate;
+
+
+  document.getElementById(
+    "utcTime"
+  ).textContent =
     "UTC " + utcTime;
 
-  document.getElementById("date").textContent =
-    utcDate;
 
-  document.getElementById("time2").textContent =
+  document.getElementById(
+    "localTime2"
+  ).textContent =
+    localTime;
+
+
+  document.getElementById(
+    "localDate2"
+  ).textContent =
+    localDate;
+
+
+  document.getElementById(
+    "utcTime2"
+  ).textContent =
     "UTC " + utcTime;
-
-  document.getElementById("date2").textContent =
-    utcDate;
 }
 
 updateClock();
 
-setInterval(updateClock,1000);
+setInterval(
+  updateClock,
+  1000
+);
 
 
-/* ==================================================
+/* =====================================================
    PEOPLE
-================================================== */
+===================================================== */
 
-function changePeople(type,amount) {
+function changePeople(
+  type,
+  amount
+) {
 
   people[type] += amount;
+
 
   if (
     type === "adults" &&
     people[type] < 1
   ) {
+
     people[type] = 1;
+
   }
+
 
   if (
     type === "children" &&
     people[type] < 0
   ) {
+
     people[type] = 0;
+
   }
 
-  document.getElementById(type).textContent =
+
+  document.getElementById(
+    type
+  ).textContent =
     people[type];
 }
 
 
-/* ==================================================
+/* =====================================================
    CREATE TRIP
-================================================== */
+===================================================== */
 
 function createTrip() {
 
   const from =
-    document.getElementById("from").value.trim();
+    document.getElementById(
+      "from"
+    ).value.trim();
+
 
   const to =
-    document.getElementById("to").value.trim();
+    document.getElementById(
+      "to"
+    ).value.trim();
+
 
   const date =
-    document.getElementById("tripDate").value;
+    document.getElementById(
+      "tripDate"
+    ).value;
+
 
   const days =
-    Number(document.getElementById("days").value);
+    Number(
+      document.getElementById(
+        "days"
+      ).value
+    );
 
 
   if (
@@ -1252,8 +2237,8 @@ function createTrip() {
     !days
   ) {
 
-    showMessage(
-      "Please complete your trip details."
+    showToast(
+      "Please complete your trip."
     );
 
     return;
@@ -1264,17 +2249,19 @@ function createTrip() {
 
     id: Date.now(),
 
-    from: from,
+    from,
 
-    to: to,
+    to,
 
-    date: date,
+    date,
 
-    days: days,
+    days,
 
-    adults: people.adults,
+    adults:
+      people.adults,
 
-    children: people.children
+    children:
+      people.children
 
   };
 
@@ -1287,9 +2274,16 @@ function createTrip() {
     );
 
 
-  trips.unshift(trip);
+  trips.unshift(
+    trip
+  );
 
-  trips = trips.slice(0,10);
+
+  trips =
+    trips.slice(
+      0,
+      10
+    );
 
 
   localStorage.setItem(
@@ -1300,83 +2294,117 @@ function createTrip() {
 
   openTrip(trip);
 
-  renderSavedTrips();
+  renderTrips();
 }
 
 
-/* ==================================================
+/* =====================================================
    OPEN TRIP
-================================================== */
+===================================================== */
 
-function openTrip(trip) {
+function openTrip(
+  trip
+) {
 
-  currentTrip = trip;
+  currentTrip =
+    trip;
 
 
   document.getElementById(
     "currentRoute"
   ).textContent =
-    trip.from + " → " + trip.to;
+
+    trip.from +
+    " → " +
+    trip.to;
 
 
   document.getElementById(
-    "currentInfo"
+    "currentMeta"
   ).textContent =
-    formatDate(trip.date) +
+
+    formatDate(
+      trip.date
+    ) +
+
     " · " +
+
     trip.days +
+
     " days · " +
+
     trip.adults +
+
     " adults · " +
+
     trip.children +
+
     " children";
 
 
-  document
-    .getElementById("home")
-    .classList.remove("active");
+  document.getElementById(
+    "home"
+  ).classList.remove(
+    "active"
+  );
 
 
-  document
-    .getElementById("travelmate")
-    .classList.add("active");
+  document.getElementById(
+    "travelmate"
+  ).classList.add(
+    "active"
+  );
 
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 }
 
 
-/* ==================================================
+/* =====================================================
    HOME
-================================================== */
+===================================================== */
 
 function goHome() {
 
-  document
-    .getElementById("travelmate")
-    .classList.remove("active");
+  document.getElementById(
+    "travelmate"
+  ).classList.remove(
+    "active"
+  );
 
 
-  document
-    .getElementById("home")
-    .classList.add("active");
+  document.getElementById(
+    "home"
+  ).classList.add(
+    "active"
+  );
 
 
-  window.scrollTo(0,0);
+  window.scrollTo(
+    0,
+    0
+  );
 }
 
 
-/* ==================================================
-   SAVED TRIPS
-================================================== */
+/* =====================================================
+   RENDER SAVED TRIPS
+===================================================== */
 
-function renderSavedTrips() {
+function renderTrips() {
 
   const containers = [
 
-    document.getElementById("savedTrips"),
+    document.getElementById(
+      "savedTrips"
+    ),
 
-    document.getElementById("savedTrips2")
+    document.getElementById(
+      "savedTrips2"
+    )
 
   ];
 
@@ -1389,109 +2417,180 @@ function renderSavedTrips() {
     );
 
 
-  containers.forEach(container => {
-
-    container.innerHTML = "";
-
-
-    if (trips.length === 0) {
+  containers.forEach(
+    container => {
 
       container.innerHTML =
-        '<div class="empty">No saved trips yet.</div>';
-
-      return;
-    }
+        "";
 
 
-    trips.forEach(trip => {
+      if (
+        trips.length === 0
+      ) {
 
-      const button =
-        document.createElement("button");
+        container.innerHTML = `
 
-      button.className =
-        "saved-trip";
-
-
-      button.innerHTML = `
-
-        <div class="saved-main">
-
-          <div class="saved-route">
-
-            ${escapeHtml(trip.from)}
-            →
-            ${escapeHtml(trip.to)}
-
-          </div>
-
-          <div class="saved-info">
-
-            ${formatDate(trip.date)}
-            · ${trip.days} days
-            · ${trip.adults} adults
-            · ${trip.children} children
-
-          </div>
-
-        </div>
-
-
-        <div class="saved-actions">
-
-          <div class="saved-arrow">
-            ›
-          </div>
-
-
-          <button
-            class="delete-trip"
-            onclick="
-              event.stopPropagation();
-              deleteTrip(${trip.id});
+          <div
+            style="
+              color:#829bb4;
+              font-size:13px;
+              padding:6px 2px;
             "
-            aria-label="Delete trip">
+          >
+            No saved trips yet.
+          </div>
 
-            <svg viewBox="0 0 24 24">
+        `;
 
-              <path d="M4 7h16"/>
-              <path d="M10 11v6"/>
-              <path d="M14 11v6"/>
-              <path d="M6 7l1 14h10l1-14"/>
-              <path d="M9 7V4h6v3"/>
+        return;
 
-            </svg>
-
-          </button>
-
-        </div>
-
-      `;
+      }
 
 
-      button.onclick = () =>
-        openTrip(trip);
+      trips.forEach(
+        trip => {
+
+          const row =
+            document.createElement(
+              "div"
+            );
 
 
-      container.appendChild(button);
+          row.className =
+            "saved-trip";
 
-    });
 
-  });
+          row.innerHTML = `
+
+            <div
+              class="trip-thumb">
+            </div>
+
+
+            <div
+              class="saved-content">
+
+              <div
+                class="saved-route">
+
+                ${escapeHtml(
+                  trip.from
+                )}
+
+                →
+
+                ${escapeHtml(
+                  trip.to
+                )}
+
+              </div>
+
+
+              <div
+                class="saved-meta">
+
+                ${formatDate(
+                  trip.date
+                )}
+
+                ·
+
+                ${trip.days}
+                days
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="saved-arrow">
+
+              ›
+
+            </div>
+
+
+            <button
+              class="delete-button"
+              aria-label="Delete trip">
+
+              <svg
+                viewBox="0 0 24 24">
+
+                <path
+                  d="M4 7h16"/>
+
+                <path
+                  d="M9 7V4h6v3"/>
+
+                <path
+                  d="M7 7l1 14h8l1-14"/>
+
+                <path
+                  d="M10 11v6"/>
+
+                <path
+                  d="M14 11v6"/>
+
+              </svg>
+
+            </button>
+
+          `;
+
+
+          row.onclick =
+            () =>
+              openTrip(trip);
+
+
+          const deleteButton =
+            row.querySelector(
+              ".delete-button"
+            );
+
+
+          deleteButton.onclick =
+            event => {
+
+              event.stopPropagation();
+
+              deleteTrip(
+                trip.id
+              );
+
+            };
+
+
+          container.appendChild(
+            row
+          );
+
+        }
+      );
+
+    }
+  );
 }
 
 
-/* ==================================================
-   DELETE TRIP
-================================================== */
+/* =====================================================
+   DELETE
+===================================================== */
 
-function deleteTrip(id) {
+function deleteTrip(
+  id
+) {
 
-  const confirmed =
-    confirm("Delete this trip?");
+  if (
+    !confirm(
+      "Delete this trip?"
+    )
+  ) {
 
-
-  if (!confirmed) {
     return;
+
   }
 
 
@@ -1505,7 +2604,8 @@ function deleteTrip(id) {
 
   trips =
     trips.filter(
-      trip => trip.id !== id
+      trip =>
+        trip.id !== id
     );
 
 
@@ -1515,24 +2615,27 @@ function deleteTrip(id) {
   );
 
 
-  renderSavedTrips();
+  renderTrips();
 
 
-  showMessage(
+  showToast(
     "Trip deleted."
   );
 }
 
 
-/* ==================================================
-   DATE
-================================================== */
+/* =====================================================
+   DATE FORMAT
+===================================================== */
 
-function formatDate(value) {
+function formatDate(
+  value
+) {
 
   const date =
     new Date(
-      value + "T00:00:00"
+      value +
+      "T00:00:00"
     );
 
 
@@ -1547,55 +2650,85 @@ function formatDate(value) {
 }
 
 
-/* ==================================================
+/* =====================================================
    SECURITY
-================================================== */
+===================================================== */
 
-function escapeHtml(value) {
+function escapeHtml(
+  value
+) {
 
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  return String(
+    value
+  )
+
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+
+  .replaceAll(
+    '"',
+    "&quot;"
+  )
+
+  .replaceAll(
+    "'",
+    "&#039;"
+  );
+
 }
 
 
-/* ==================================================
-   OTHER FEATURES
-================================================== */
+/* =====================================================
+   PLACEHOLDER FEATURES
+===================================================== */
 
-function featureMessage(name) {
+function feature(
+  name
+) {
 
-  showMessage(
+  showToast(
     name +
-    " will be connected to TravelMate."
+    " is ready to be connected."
   );
+
 }
 
 
 function askTravelMate() {
 
-  showMessage(
-    "TravelMate AI will be connected here."
+  showToast(
+    "TravelMate AI will live here."
   );
+
 }
 
 
-/* ==================================================
-   PACKING AI
-================================================== */
+/* =====================================================
+   PACKING
+===================================================== */
 
 function openPacking() {
 
   if (!currentTrip) {
 
-    showMessage(
+    showToast(
       "Please select a trip first."
     );
 
     return;
+
   }
 
 
@@ -1617,110 +2750,139 @@ function openPacking() {
     );
 
 
-  document.getElementById(
-    "packingTrip"
-  ).textContent =
-    currentTrip.from +
-    " → " +
-    currentTrip.to;
-
-
   loading.style.display =
     "block";
 
 
-  result.innerHTML = "";
+  result.innerHTML =
+    "";
 
 
-  modal.classList.add("active");
+  modal.classList.add(
+    "active"
+  );
 
 
-  fetch("/api/packing", {
+  fetch(
+    "/api/packing",
+    {
 
-    method: "POST",
+      method: "POST",
 
-    headers: {
-      "Content-Type":
-        "application/json"
-    },
+      headers: {
 
-    body:
-      JSON.stringify(currentTrip)
+        "Content-Type":
+          "application/json"
 
-  })
+      },
 
-  .then(response => {
+      body:
+        JSON.stringify(
+          currentTrip
+        )
 
-    if (!response.ok) {
+    }
+  )
 
-      throw new Error(
-        "AI request failed"
+  .then(
+    response => {
+
+      if (!response.ok) {
+
+        throw new Error(
+          "AI request failed"
+        );
+
+      }
+
+      return response.json();
+
+    }
+  )
+
+  .then(
+    data => {
+
+      loading.style.display =
+        "none";
+
+      renderPacking(
+        data.result
       );
 
     }
+  )
 
-    return response.json();
+  .catch(
+    error => {
 
-  })
-
-  .then(data => {
-
-    loading.style.display =
-      "none";
-
-    renderPacking(
-      data.result
-    );
-
-  })
-
-  .catch(error => {
-
-    console.error(error);
-
-    loading.style.display =
-      "none";
+      console.error(
+        error
+      );
 
 
-    result.innerHTML = `
+      loading.style.display =
+        "none";
 
-      <div class="packing-category">
 
-        <div class="packing-category-title">
-          Something went wrong
+      result.innerHTML = `
+
+        <div
+          class="result-category">
+
+          <div
+            class="result-title">
+
+            TravelMate AI
+
+          </div>
+
+          <div
+            class="result-item">
+
+            AI connection is not
+            available yet.
+
+            <br><br>
+
+            We will connect it
+            after the interface
+            is finished.
+
+          </div>
+
         </div>
 
-        <div class="packing-item">
-          TravelMate could not get
-          the packing list.
-          Please try again.
-        </div>
+      `;
 
-      </div>
+    }
+  );
 
-    `;
-
-  });
 }
 
 
-/* ==================================================
+/* =====================================================
    CLOSE PACKING
-================================================== */
+===================================================== */
 
 function closePacking() {
 
-  document
-    .getElementById("packingModal")
-    .classList.remove("active");
+  document.getElementById(
+    "packingModal"
+  ).classList.remove(
+    "active"
+  );
+
 }
 
 
-/* ==================================================
-   RENDER AI RESULT
-================================================== */
+/* =====================================================
+   RENDER PACKING
+===================================================== */
 
-function renderPacking(raw) {
+function renderPacking(
+  raw
+) {
 
   const result =
     document.getElementById(
@@ -1733,23 +2895,32 @@ function renderPacking(raw) {
 
   try {
 
-    let clean =
+    const clean =
       raw
-        .replace(/```json/gi,"")
-        .replace(/```/g,"")
+        .replace(
+          /```json/gi,
+          ""
+        )
+        .replace(
+          /```/g,
+          ""
+        )
         .trim();
 
 
     data =
-      JSON.parse(clean);
+      JSON.parse(
+        clean
+      );
 
   }
 
-  catch(error) {
+  catch {
 
     result.innerHTML = `
 
-      <div class="packing-item">
+      <div
+        class="result-item">
 
         ${escapeHtml(raw)}
 
@@ -1758,80 +2929,137 @@ function renderPacking(raw) {
     `;
 
     return;
+
   }
 
 
-  result.innerHTML = "";
+  result.innerHTML =
+    "";
 
 
-  Object.entries(data).forEach(
-    ([category,items]) => {
+  Object.entries(
+    data
+  ).forEach(
+    ([category, items]) => {
 
-      const categoryBlock =
-        document.createElement("div");
 
-      categoryBlock.className =
-        "packing-category";
+      const block =
+        document.createElement(
+          "div"
+        );
+
+
+      block.className =
+        "result-category";
 
 
       const title =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       title.className =
-        "packing-category-title";
+        "result-title";
+
 
       title.textContent =
         category;
 
 
-      categoryBlock.appendChild(
+      block.appendChild(
         title
       );
 
 
       if (
-        typeof items === "object" &&
-        !Array.isArray(items)
+        Array.isArray(items)
       ) {
 
-        Object.entries(items).forEach(
-          ([subCategory,subItems]) => {
+        items.forEach(
+          item => {
 
-            const subTitle =
-              document.createElement("div");
-
-            subTitle.className =
-              "packing-subcategory";
-
-            subTitle.textContent =
-              subCategory;
+            const row =
+              document.createElement(
+                "div"
+              );
 
 
-            categoryBlock.appendChild(
-              subTitle
+            row.className =
+              "result-item";
+
+
+            row.textContent =
+              "✓ " + item;
+
+
+            block.appendChild(
+              row
+            );
+
+          }
+        );
+
+      }
+
+
+      else if (
+        typeof items ===
+        "object"
+      ) {
+
+        Object.entries(
+          items
+        ).forEach(
+          ([sub, list]) => {
+
+
+            const subtitle =
+              document.createElement(
+                "div"
+              );
+
+
+            subtitle.className =
+              "result-subtitle";
+
+
+            subtitle.textContent =
+              sub;
+
+
+            block.appendChild(
+              subtitle
             );
 
 
             if (
-              Array.isArray(subItems)
+              Array.isArray(list)
             ) {
 
-              subItems.forEach(item => {
+              list.forEach(
+                item => {
 
-                const row =
-                  document.createElement("div");
+                  const row =
+                    document.createElement(
+                      "div"
+                    );
 
-                row.className =
-                  "packing-item";
 
-                row.textContent =
-                  "✓ " + item;
+                  row.className =
+                    "result-item";
 
-                categoryBlock.appendChild(
-                  row
-                );
 
-              });
+                  row.textContent =
+                    "✓ " + item;
+
+
+                  block.appendChild(
+                    row
+                  );
+
+                }
+              );
 
             }
 
@@ -1840,44 +3068,24 @@ function renderPacking(raw) {
 
       }
 
-      else if (
-        Array.isArray(items)
-      ) {
-
-        items.forEach(item => {
-
-          const row =
-            document.createElement("div");
-
-          row.className =
-            "packing-item";
-
-          row.textContent =
-            "✓ " + item;
-
-          categoryBlock.appendChild(
-            row
-          );
-
-        });
-
-      }
-
 
       result.appendChild(
-        categoryBlock
+        block
       );
 
     }
   );
+
 }
 
 
-/* ==================================================
-   MESSAGE
-================================================== */
+/* =====================================================
+   TOAST
+===================================================== */
 
-function showMessage(message) {
+function showToast(
+  message
+) {
 
   const toast =
     document.getElementById(
@@ -1894,21 +3102,25 @@ function showMessage(message) {
   );
 
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    toast.classList.remove(
-      "show"
-    );
+      toast.classList.remove(
+        "show"
+      );
 
-  },2800);
+    },
+    2600
+  );
+
 }
 
 
-/* ==================================================
+/* =====================================================
    START
-================================================== */
+===================================================== */
 
-renderSavedTrips();
+renderTrips();
 
 </script>
 
