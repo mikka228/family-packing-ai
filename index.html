@@ -1,35 +1,41 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TravelMate AI</title>
 
 <style>
-* {
-  box-sizing: border-box;
+:root {
+  --bg: #06101d;
+  --bg-light: #0b1a2d;
+  --card: #0e2138;
+  --card-light: #142b46;
+  --text: #f5f7fa;
+  --muted: #879bb3;
+  --accent: #55d6ff;
+  --accent2: #7a7cff;
+  --line: rgba(255,255,255,0.08);
 }
 
-:root {
-  --bg: #07111f;
-  --bg2: #0b1b2f;
-  --card: #10243d;
-  --card2: #142c48;
-  --text: #f4f7fb;
-  --muted: #91a4bb;
-  --accent: #55d6ff;
-  --accent2: #7c6cff;
-  --green: #55e39a;
-  --border: rgba(255,255,255,0.08);
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
   background:
-    radial-gradient(circle at top, #123052 0%, var(--bg) 48%);
+    radial-gradient(circle at 50% -10%, #17375b 0%, var(--bg) 48%);
   color: var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Segoe UI",
+    Arial,
+    sans-serif;
 }
 
 button,
@@ -38,7 +44,8 @@ input {
 }
 
 button {
-  cursor: pointer;
+  border: 0;
+  color: inherit;
 }
 
 .app {
@@ -47,16 +54,12 @@ button {
   min-height: 100vh;
   margin: auto;
   position: relative;
-  overflow: hidden;
 }
-
-/* ---------- ОБЩИЕ ЭКРАНЫ ---------- */
 
 .screen {
   min-height: 100vh;
-  padding: 20px 18px 30px;
+  padding: 8px 20px 28px;
   display: none;
-  animation: fadeIn 0.3s ease;
 }
 
 .screen.active {
@@ -64,336 +67,373 @@ button {
   flex-direction: column;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* =========================
+   TOP
+========================= */
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 54px;
 }
 
-/* ---------- ЭКРАН 1 ---------- */
+.clock {
+  text-align: left;
+  color: var(--text);
+  line-height: 1.1;
+}
 
-.utc {
-  text-align: center;
+.clock .time {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.clock .date {
+  margin-top: 4px;
+  font-size: 13px;
   color: var(--muted);
-  font-size: 14px;
-  letter-spacing: 1px;
-  margin-bottom: 28px;
 }
 
-.logo {
-  text-align: center;
-  font-size: 29px;
-  font-weight: 800;
+.brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  margin-top: 2px;
+}
+
+.brand span {
+  color: var(--accent);
+}
+
+/* =========================
+   HOME
+========================= */
+
+.home-title {
+  margin-top: 38px;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 700;
   letter-spacing: -1px;
 }
 
-.logo span {
-  color: var(--accent);
-}
-
-.subtitle {
-  text-align: center;
-  color: var(--muted);
-  margin-top: 7px;
-  font-size: 14px;
-}
-
 .trip-card {
-  margin-top: 32px;
-  padding: 22px;
-  border-radius: 26px;
-  background: linear-gradient(
-    145deg,
-    rgba(20,44,72,0.95),
-    rgba(9,26,46,0.95)
-  );
-  border: 1px solid var(--border);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  background: rgba(14,33,56,0.92);
+  border: 1px solid var(--line);
+  border-radius: 27px;
+  padding: 21px;
+  box-shadow: 0 18px 55px rgba(0,0,0,0.22);
 }
 
-.trip-label {
+.label {
+  display: block;
+  margin-bottom: 7px;
   color: var(--muted);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
 }
 
 .route {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.place {
-  flex: 1;
-}
-
-.place small {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  margin-bottom: 5px;
-}
-
-.place input {
-  width: 100%;
-  border: 0;
-  outline: none;
-  color: white;
-  background: transparent;
-  font-size: 19px;
-  font-weight: 700;
-}
-
-.arrow {
-  color: var(--accent);
-  font-size: 25px;
-}
-
-.date-row {
-  margin-top: 22px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 28px 1fr;
+  align-items: end;
+  gap: 8px;
+}
+
+.route-arrow {
+  color: var(--accent);
+  text-align: center;
+  font-size: 22px;
+  padding-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+}
+
+.route input {
+  font-size: 18px;
+  font-weight: 700;
+  padding: 0;
+}
+
+.form-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
   gap: 10px;
 }
 
-.info-box {
-  background: rgba(255,255,255,0.04);
-  padding: 13px;
-  border-radius: 15px;
+.field {
+  padding: 13px 14px;
+  border-radius: 17px;
+  background: rgba(255,255,255,0.045);
 }
 
-.info-box small {
-  color: var(--muted);
-  display: block;
-  margin-bottom: 5px;
+.field input {
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.info-box input {
-  width: 100%;
-  background: transparent;
-  border: 0;
-  color: white;
-  outline: none;
-}
-
-.people {
+.people-grid {
   margin-top: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
-.people .info-box {
+.people-box {
+  padding: 13px 14px;
+  border-radius: 17px;
+  background: rgba(255,255,255,0.045);
+}
+
+.people-control {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+}
+
+.people-control span {
+  font-size: 17px;
+  font-weight: 700;
 }
 
 .counter {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .counter button {
-  width: 27px;
-  height: 27px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 0;
-  color: white;
-  background: rgba(255,255,255,0.10);
-}
-
-.counter span {
-  min-width: 15px;
-  text-align: center;
-}
-
-.main-button {
-  margin-top: auto;
-  margin-bottom: 12px;
-  width: 100%;
-  padding: 18px;
-  border: 0;
-  border-radius: 20px;
-  color: #06111d;
-  font-weight: 800;
-  font-size: 18px;
-  background: linear-gradient(135deg, var(--accent), #8ce9ff);
-  box-shadow: 0 10px 35px rgba(85,214,255,0.20);
-}
-
-.hint {
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
-  margin-bottom: 5px;
-}
-
-/* ---------- ЭКРАН 2 ---------- */
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-
-.back {
-  border: 0;
-  background: rgba(255,255,255,0.07);
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
+  background: rgba(255,255,255,0.08);
   font-size: 20px;
 }
 
-.top-title {
-  text-align: center;
+.search-button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 17px;
+  border-radius: 19px;
+  background: linear-gradient(135deg, var(--accent), #83e5ff);
+  color: #06101d;
+  font-weight: 800;
+  font-size: 16px;
+  box-shadow: 0 10px 30px rgba(85,214,255,0.18);
 }
 
-.top-title strong {
-  display: block;
-  font-size: 18px;
+/* =========================
+   SAVED TRIPS
+========================= */
+
+.saved-section {
+  margin-top: 28px;
 }
 
-.top-title small {
+.section-label {
   color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin: 0 3px 12px;
 }
 
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
+.saved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.saved-trip {
+  width: 100%;
+  padding: 15px 16px;
+  border-radius: 17px;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.045);
+  text-align: left;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: var(--card);
+  justify-content: space-between;
 }
 
-.dashboard-card {
-  padding: 18px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #112c49, #0b1c31);
-  border: 1px solid var(--border);
-  margin-bottom: 20px;
+.saved-trip:active {
+  transform: scale(0.98);
 }
 
-.dashboard-card small {
+.saved-main {
+  min-width: 0;
+}
+
+.saved-route {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.saved-info {
+  margin-top: 4px;
   color: var(--muted);
+  font-size: 12px;
 }
 
-.dashboard-route {
-  margin-top: 7px;
-  font-size: 19px;
-  font-weight: 800;
+.saved-arrow {
+  color: var(--muted);
+  font-size: 18px;
+  margin-left: 10px;
 }
 
-.dashboard-date {
-  margin-top: 8px;
+.empty {
   color: var(--muted);
   font-size: 13px;
+  padding: 5px 3px;
 }
 
-.section-title {
+/* =========================
+   TRAVELMATE SCREEN
+========================= */
+
+.screen2 {
+  padding-top: 8px;
+}
+
+.back-button {
+  margin-top: 13px;
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.07);
+  font-size: 21px;
+}
+
+.current-trip {
+  margin-top: 17px;
+  padding: 14px 2px 8px;
+}
+
+.current-route {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.current-info {
+  margin-top: 5px;
   color: var(--muted);
   font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin: 8px 3px 12px;
 }
 
-.icons {
+.icon-grid {
+  margin-top: 25px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  row-gap: 25px;
+  column-gap: 12px;
 }
 
-.icon-card {
-  min-height: 105px;
-  border: 1px solid var(--border);
-  border-radius: 21px;
-  background: rgba(16,36,61,0.82);
-  color: white;
-  padding: 14px 8px;
-  transition: transform 0.15s ease, background 0.15s ease;
+.icon-button {
+  background: transparent;
+  text-align: center;
+  padding: 3px;
 }
 
-.icon-card:active {
-  transform: scale(0.96);
+.icon-button:active {
+  transform: scale(0.92);
 }
 
-.icon {
-  width: 48px;
-  height: 48px;
+.icon-symbol {
+  width: 54px;
+  height: 54px;
   margin: auto;
-  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.07);
-  font-size: 25px;
+  color: var(--accent);
 }
 
-.icon-card strong {
+.icon-symbol svg {
+  width: 34px;
+  height: 34px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-name {
   display: block;
-  margin-top: 9px;
-  font-size: 12px;
+  margin-top: 7px;
+  font-size: 11px;
+  color: #d9e1ea;
 }
 
-.ai-button {
-  margin-top: auto;
+.ask-button {
   width: 100%;
+  margin-top: auto;
   padding: 17px;
-  border: 0;
-  border-radius: 20px;
+  border-radius: 19px;
+  background: linear-gradient(135deg, var(--accent2), #4bbcff);
   color: white;
   font-size: 16px;
   font-weight: 800;
-  background: linear-gradient(135deg, #6c63ff, #4bbcff);
-  box-shadow: 0 12px 35px rgba(92,107,255,0.22);
+  box-shadow: 0 12px 35px rgba(90,100,255,0.18);
 }
 
-.news {
-  margin-top: 18px;
-  padding: 13px 15px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.035);
-  color: var(--muted);
-  font-size: 12px;
-  text-align: center;
-}
-
-/* ---------- СООБЩЕНИЕ ---------- */
+/* =========================
+   TOAST
+========================= */
 
 .toast {
   position: fixed;
+  z-index: 100;
   left: 50%;
-  bottom: 25px;
+  bottom: 24px;
   transform: translateX(-50%);
   width: calc(100% - 40px);
   max-width: 440px;
-  padding: 15px;
-  border-radius: 16px;
-  background: #162d48;
-  border: 1px solid var(--border);
-  text-align: center;
+  padding: 15px 17px;
+  border-radius: 17px;
+  background: #162c46;
+  border: 1px solid var(--line);
   color: white;
+  text-align: center;
+  font-size: 13px;
   display: none;
-  z-index: 20;
 }
 
 .toast.show {
   display: block;
+}
+
+/* =========================
+   SMALL SCREEN
+========================= */
+
+@media (max-height: 700px) {
+  .home-title {
+    margin-top: 20px;
+  }
+
+  .icon-grid {
+    margin-top: 18px;
+    row-gap: 14px;
+  }
+
+  .saved-section {
+    margin-top: 18px;
+  }
 }
 </style>
 </head>
@@ -402,223 +442,415 @@ button {
 
 <div class="app">
 
-  <!-- ЭКРАН 1 -->
-  <section id="screen1" class="screen active">
+  <!-- =====================
+       SCREEN 1 — HOME
+  ====================== -->
 
-    <div class="utc" id="utc">
-      UTC 00:00:00
+  <section id="home" class="screen active">
+
+    <div class="top">
+
+      <div class="clock">
+        <div class="time" id="time">UTC 00:00</div>
+        <div class="date" id="date">01 Jan 2026</div>
+      </div>
+
+      <div class="brand">
+        TravelMate <span>AI</span>
+      </div>
+
     </div>
 
-    <div class="logo">
-      Travel<span>Mate</span> AI
+
+    <div class="home-title">
+      New Trip
     </div>
 
-    <div class="subtitle">
-      Твой помощник в путешествии
-    </div>
 
     <div class="trip-card">
 
-      <div class="trip-label">
-        Моя поездка
-      </div>
-
       <div class="route">
 
-        <div class="place">
-          <small>ОТКУДА</small>
-          <input id="from" value="Калининград">
+        <div>
+          <span class="label">FROM</span>
+          <input id="from" value="Kaliningrad">
         </div>
 
-        <div class="arrow">→</div>
-
-        <div class="place">
-          <small>КУДА</small>
-          <input id="to" value="Гоа, Индия">
+        <div class="route-arrow">
+          →
         </div>
 
-      </div>
-
-      <div class="date-row">
-
-        <div class="info-box">
-          <small>ОТПРАВЛЕНИЕ</small>
-          <input id="dateFrom" type="date">
-        </div>
-
-        <div class="info-box">
-          <small>ДНЕЙ</small>
-          <input id="days" type="number" value="90" min="1">
+        <div>
+          <span class="label">TO</span>
+          <input id="to" value="Goa, India">
         </div>
 
       </div>
 
-      <div class="people">
 
-        <div class="info-box">
-          <small>ВЗРОСЛЫЕ</small>
+      <div class="form-grid">
 
-          <div class="counter">
-            <button onclick="changePeople('adults', -1)">−</button>
-            <span id="adults">2</span>
-            <button onclick="changePeople('adults', 1)">+</button>
+        <div class="field">
+          <span class="label">DATE</span>
+          <input id="tripDate" type="date">
+        </div>
+
+        <div class="field">
+          <span class="label">DAYS</span>
+          <input id="days" type="number" min="1" value="90">
+        </div>
+
+      </div>
+
+
+      <div class="people-grid">
+
+        <div class="people-box">
+
+          <span class="label">ADULTS</span>
+
+          <div class="people-control">
+
+            <div class="counter">
+              <button onclick="changePeople('adults', -1)">−</button>
+              <span id="adults">2</span>
+              <button onclick="changePeople('adults', 1)">+</button>
+            </div>
+
           </div>
+
         </div>
 
-        <div class="info-box">
-          <small>ДЕТИ</small>
 
-          <div class="counter">
-            <button onclick="changePeople('children', -1)">−</button>
-            <span id="children">3</span>
-            <button onclick="changePeople('children', 1)">+</button>
+        <div class="people-box">
+
+          <span class="label">CHILDREN</span>
+
+          <div class="people-control">
+
+            <div class="counter">
+              <button onclick="changePeople('children', -1)">−</button>
+              <span id="children">3</span>
+              <button onclick="changePeople('children', 1)">+</button>
+            </div>
+
           </div>
+
         </div>
 
       </div>
+
+
+      <button class="search-button" onclick="createTrip()">
+        SEARCH
+      </button>
 
     </div>
 
-    <button class="main-button" onclick="openTravelMate()">
-      ✦ TravelMate AI
-    </button>
 
-    <div class="hint">
-      Один помощник для всей поездки
+    <div class="saved-section">
+
+      <div class="section-label">
+        SAVED TRIPS
+      </div>
+
+      <div id="savedTrips" class="saved-list"></div>
+
     </div>
 
   </section>
 
 
-  <!-- ЭКРАН 2 -->
-  <section id="screen2" class="screen">
+  <!-- =====================
+       SCREEN 2 — TRAVELMATE
+  ====================== -->
 
-    <div class="topbar">
+  <section id="travelmate" class="screen screen2">
 
-      <button class="back" onclick="goBack()">
-        ←
-      </button>
+    <div class="top">
 
-      <div class="top-title">
-        <strong>TravelMate AI</strong>
-        <small>Моя поездка</small>
+      <div class="clock">
+        <div class="time" id="time2">UTC 00:00</div>
+        <div class="date" id="date2">01 Jan 2026</div>
       </div>
 
-      <div class="avatar">
-        🌍
-      </div>
-
-    </div>
-
-    <div class="dashboard-card">
-
-      <small>МАРШРУТ</small>
-
-      <div class="dashboard-route" id="dashboardRoute">
-        Калининград → Гоа, Индия
-      </div>
-
-      <div class="dashboard-date" id="dashboardInfo">
-        90 дней • 2 взрослых • 3 детей
+      <div class="brand">
+        TravelMate <span>AI</span>
       </div>
 
     </div>
 
-    <div class="section-title">
-      Чем могу помочь?
-    </div>
 
-    <div class="icons">
-
-      <button class="icon-card" onclick="showMessage('🧳 Раздел багажа — следующим шагом подключим наш AI-сборщик.')">
-        <div class="icon">🧳</div>
-        <strong>Багаж</strong>
-      </button>
-
-      <button class="icon-card" onclick="showMessage('🌤 Погода будет показываться здесь.')">
-        <div class="icon">🌤️</div>
-        <strong>Погода</strong>
-      </button>
-
-      <button class="icon-card" onclick="showMessage('✈️ Здесь будут авиабилеты и другие варианты транспорта.')">
-        <div class="icon">✈️</div>
-        <strong>Билеты</strong>
-      </button>
-
-      <button class="icon-card" onclick="showMessage('🛂 Здесь TravelMate будет проверять документы и правила въезда.')">
-        <div class="icon">🛂</div>
-        <strong>Документы</strong>
-      </button>
-
-      <button class="icon-card" onclick="showMessage('💰 Здесь будут валюта, курс и полезные денежные подсказки.')">
-        <div class="icon">💰</div>
-        <strong>Деньги</strong>
-      </button>
-
-      <button class="icon-card" onclick="showMessage('📱 Здесь будут SIM, eSIM и интернет.')">
-        <div class="icon">📱</div>
-        <strong>Связь</strong>
-      </button>
-
-      <button class="icon-card" onclick="showMessage('📰 Здесь появятся важные события, которые могут повлиять на поездку.')">
-        <div class="icon">📰</div>
-        <strong>Важно</strong>
-      </button>
-
-      <button class="icon-card" onclick="showMessage('🏥 Здесь будут экстренные службы, больницы и полезные контакты.')">
-        <div class="icon">🏥</div>
-        <strong>Помощь</strong>
-      </button>
-
-      <button class="icon-card" onclick="showMessage('🗺️ Здесь будет маршрут и план поездки.')">
-        <div class="icon">🗺️</div>
-        <strong>Маршрут</strong>
-      </button>
-
-    </div>
-
-    <div class="news">
-      🛰️ TravelMate будет следить за тем, что важно именно для твоей поездки
-    </div>
-
-    <button class="ai-button" onclick="showMessage('🤖 AI-помощник скоро будет здесь. Сначала построим интерфейс, затем подключим мозг.')">
-      🤖 Спросить TravelMate
+    <button class="back-button" onclick="goHome()">
+      ←
     </button>
+
+
+    <div class="current-trip">
+
+      <div class="current-route" id="currentRoute">
+        Kaliningrad → Goa, India
+      </div>
+
+      <div class="current-info" id="currentInfo">
+        90 days · 2 adults · 3 children
+      </div>
+
+    </div>
+
+
+    <!-- iPhone-like icon grid -->
+
+    <div class="icon-grid">
+
+
+      <!-- PACKING -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Packing')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 7h12l1 14H5L6 7z"/>
+            <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+            <path d="M9 11v6"/>
+            <path d="M15 11v6"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Packing</span>
+
+      </button>
+
+
+      <!-- WEATHER -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Weather')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <circle cx="9" cy="14" r="4"/>
+            <path d="M13 14h3a4 4 0 0 0 0-8 5 5 0 0 0-9-1"/>
+            <path d="M17 16v4"/>
+            <path d="M20 17l-2 3"/>
+            <path d="M14 17l2 3"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Weather</span>
+
+      </button>
+
+
+      <!-- TICKETS -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Tickets')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 8a2 2 0 0 0 0 4 2 2 0 0 0 0 4v3h18v-3a2 2 0 0 0 0-4 2 2 0 0 0 0-4V5H3v3z"/>
+            <path d="M13 5v14"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Tickets</span>
+
+      </button>
+
+
+      <!-- DOCUMENTS -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Documents')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 3h9l4 4v14H6z"/>
+            <path d="M15 3v5h4"/>
+            <path d="M9 13h6"/>
+            <path d="M9 17h6"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Documents</span>
+
+      </button>
+
+
+      <!-- MONEY -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Money')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M14.5 8.5c-.7-.7-1.7-1-2.7-1-1.6 0-2.8.8-2.8 2s1 1.8 2.8 2.2c1.8.4 2.8 1 2.8 2.2s-1.2 2-2.8 2c-1.1 0-2.2-.4-2.9-1.1"/>
+            <path d="M12 5.5v13"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Money</span>
+
+      </button>
+
+
+      <!-- MOBILE -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Mobile')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <rect x="6" y="2.5" width="12" height="19" rx="2"/>
+            <path d="M10 5h4"/>
+            <circle cx="12" cy="18.5" r="0.8"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Mobile</span>
+
+      </button>
+
+
+      <!-- ALERTS -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Alerts')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+            <path d="M10 21h4"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Alerts</span>
+
+      </button>
+
+
+      <!-- HELP -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Help')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M9.5 9a2.6 2.6 0 1 1 4.7 1.6c-.8 1-2.2 1.2-2.2 2.8"/>
+            <path d="M12 17h.01"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Help</span>
+
+      </button>
+
+
+      <!-- ROUTE -->
+
+      <button class="icon-button"
+              onclick="featureMessage('Route')">
+
+        <div class="icon-symbol">
+          <svg viewBox="0 0 24 24">
+            <circle cx="7" cy="17" r="2"/>
+            <circle cx="17" cy="7" r="2"/>
+            <path d="M8.5 15.5c2-2 2-5 4-7s3-1.5 3-1.5"/>
+          </svg>
+        </div>
+
+        <span class="icon-name">Route</span>
+
+      </button>
+
+    </div>
+
+
+    <button class="ask-button" onclick="askTravelMate()">
+      ASK TRAVELMATE
+    </button>
+
+
+    <div class="saved-section">
+
+      <div class="section-label">
+        SAVED TRIPS
+      </div>
+
+      <div id="savedTrips2" class="saved-list"></div>
+
+    </div>
 
   </section>
 
 </div>
+
 
 <div id="toast" class="toast"></div>
 
 
 <script>
 
+/* =========================
+   STATE
+========================= */
+
 let people = {
   adults: 2,
   children: 3
 };
 
-function updateUTC() {
+let currentTrip = null;
+
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock() {
 
   const now = new Date();
 
-  const utc = new Date(
-    now.getTime() + now.getTimezoneOffset() * 60000
-  );
+  const utcTime =
+    now.toLocaleTimeString("en-GB", {
+      timeZone: "UTC",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
 
-  const time =
-    utc.getUTCHours().toString().padStart(2, "0") + ":" +
-    utc.getUTCMinutes().toString().padStart(2, "0") + ":" +
-    utc.getUTCSeconds().toString().padStart(2, "0");
+  const utcDate =
+    now.toLocaleDateString("en-GB", {
+      timeZone: "UTC",
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
 
-  document.getElementById("utc").textContent =
-    "UTC " + time;
+  document.getElementById("time").textContent =
+    "UTC " + utcTime;
+
+  document.getElementById("date").textContent =
+    utcDate;
+
+  document.getElementById("time2").textContent =
+    "UTC " + utcTime;
+
+  document.getElementById("date2").textContent =
+    utcDate;
 }
 
-setInterval(updateUTC, 1000);
-updateUTC();
+updateClock();
+setInterval(updateClock, 1000);
 
+
+/* =========================
+   PEOPLE
+========================= */
 
 function changePeople(type, amount) {
 
@@ -637,40 +869,279 @@ function changePeople(type, amount) {
 }
 
 
-function openTravelMate() {
+/* =========================
+   SAVE TRIP
+========================= */
+
+function createTrip() {
 
   const from =
-    document.getElementById("from").value || "—";
+    document.getElementById("from").value.trim();
 
   const to =
-    document.getElementById("to").value || "—";
+    document.getElementById("to").value.trim();
+
+  const date =
+    document.getElementById("tripDate").value;
 
   const days =
-    document.getElementById("days").value || "—";
+    Number(document.getElementById("days").value);
 
-  document.getElementById("dashboardRoute").textContent =
-    from + " → " + to;
 
-  document.getElementById("dashboardInfo").textContent =
-    days + " дней • " +
-    people.adults + " взрослых • " +
-    people.children + " детей";
+  if (!from || !to || !date || !days) {
 
-  document.getElementById("screen1").classList.remove("active");
-  document.getElementById("screen2").classList.add("active");
+    showMessage(
+      "Please complete your trip details."
+    );
+
+    return;
+  }
+
+
+  const trip = {
+
+    id: Date.now(),
+
+    from: from,
+
+    to: to,
+
+    date: date,
+
+    days: days,
+
+    adults: people.adults,
+
+    children: people.children
+
+  };
+
+
+  let trips =
+    JSON.parse(
+      localStorage.getItem("travelMateTrips") || "[]"
+    );
+
+
+  trips.unshift(trip);
+
+
+  /* Keep last 10 trips */
+
+  trips = trips.slice(0, 10);
+
+
+  localStorage.setItem(
+    "travelMateTrips",
+    JSON.stringify(trips)
+  );
+
+
+  openTrip(trip);
+
+  renderSavedTrips();
+
+}
+
+
+/* =========================
+   OPEN TRIP
+========================= */
+
+function openTrip(trip) {
+
+  currentTrip = trip;
+
+
+  document.getElementById("currentRoute").textContent =
+    trip.from + " → " + trip.to;
+
+
+  document.getElementById("currentInfo").textContent =
+    formatDate(trip.date) +
+    " · " +
+    trip.days +
+    " days · " +
+    trip.adults +
+    " adults · " +
+    trip.children +
+    " children";
+
+
+  document.getElementById("home")
+    .classList.remove("active");
+
+  document.getElementById("travelmate")
+    .classList.add("active");
 
   window.scrollTo(0, 0);
 }
 
 
-function goBack() {
+/* =========================
+   HOME
+========================= */
 
-  document.getElementById("screen2").classList.remove("active");
-  document.getElementById("screen1").classList.add("active");
+function goHome() {
+
+  document.getElementById("travelmate")
+    .classList.remove("active");
+
+  document.getElementById("home")
+    .classList.add("active");
 
   window.scrollTo(0, 0);
+
 }
 
+
+/* =========================
+   SAVED TRIPS
+========================= */
+
+function renderSavedTrips() {
+
+  const containers = [
+
+    document.getElementById("savedTrips"),
+
+    document.getElementById("savedTrips2")
+
+  ];
+
+
+  let trips =
+    JSON.parse(
+      localStorage.getItem("travelMateTrips") || "[]"
+    );
+
+
+  containers.forEach(container => {
+
+    container.innerHTML = "";
+
+
+    if (trips.length === 0) {
+
+      container.innerHTML =
+        '<div class="empty">No saved trips yet.</div>';
+
+      return;
+
+    }
+
+
+    trips.forEach(trip => {
+
+      const button =
+        document.createElement("button");
+
+      button.className = "saved-trip";
+
+
+      button.innerHTML = `
+
+        <div class="saved-main">
+
+          <div class="saved-route">
+            ${escapeHtml(trip.from)}
+            →
+            ${escapeHtml(trip.to)}
+          </div>
+
+          <div class="saved-info">
+            ${formatDate(trip.date)}
+            · ${trip.days} days
+            · ${trip.adults} adults
+            · ${trip.children} children
+          </div>
+
+        </div>
+
+        <div class="saved-arrow">
+          ›
+        </div>
+
+      `;
+
+
+      button.onclick = () => openTrip(trip);
+
+
+      container.appendChild(button);
+
+    });
+
+  });
+
+}
+
+
+/* =========================
+   FORMAT DATE
+========================= */
+
+function formatDate(value) {
+
+  const date =
+    new Date(value + "T00:00:00");
+
+  return date.toLocaleDateString(
+    "en-GB",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    }
+  );
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHtml(value) {
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+function featureMessage(name) {
+
+  showMessage(
+    name +
+    " will be connected to TravelMate."
+  );
+
+}
+
+
+/* =========================
+   AI BUTTON
+========================= */
+
+function askTravelMate() {
+
+  showMessage(
+    "TravelMate AI will be connected here."
+  );
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
 
 function showMessage(message) {
 
@@ -678,12 +1149,24 @@ function showMessage(message) {
     document.getElementById("toast");
 
   toast.textContent = message;
+
   toast.classList.add("show");
 
+
   setTimeout(() => {
+
     toast.classList.remove("show");
-  }, 3000);
+
+  }, 2800);
+
 }
+
+
+/* =========================
+   START
+========================= */
+
+renderSavedTrips();
 
 </script>
 
