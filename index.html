@@ -37,7 +37,65 @@ function goHome(){$('trip').classList.remove('active');$('home').classList.remov
 function renderTrips(){['saved','saved2'].forEach(id=>{let b=$(id);b.innerHTML='';let a=trips();if(!a.length){b.innerHTML='<div class="muted">No saved trips yet. Create your first trip above.</div>';return}a.slice(0,6).forEach(t=>{let r=document.createElement('div');r.className='savedrow';r.innerHTML='<div class="savedico">➤</div><div class="savedinfo"><div class="savedroute">'+esc(t.from)+' → '+esc(t.to)+'</div><div class="meta">'+esc(datefmt(t.date))+' · '+esc(t.days)+' days · '+esc(Number(t.adults)+Number(t.children))+' travellers</div></div><button class="small" aria-label="Delete trip">×</button>';r.querySelector('.savedinfo').onclick=()=>openTrip(t);r.querySelector('.savedico').onclick=()=>openTrip(t);r.querySelector('button').onclick=()=>{store(trips().filter(x=>x.id!==t.id));renderTrips();toast('Trip deleted')};b.appendChild(r)})})}
 function modal(title,html){$('modalTitle').textContent=title;$('body').innerHTML=html;$('modal').classList.add('show')}function closeModal(){$('modal').classList.remove('show')}
 function openTool(k){if(k!=='help'&&!current){toast('Create or open a trip first.');return}if(k==='packing')return packing();if(k==='documents')return docs();if(k==='budget')return budget();if(k==='weather')return weather();if(k==='tickets')return tickets();if(k==='route')return route();if(k==='mobile')return mobile();if(k==='alerts')return alerts();if(k==='help')return help();if(k==='ask')return ask()}
-async function packing(){modal('Packing list','<p>✦ TravelMate is preparing your personalised checklist…</p><div id="packresult"></div>');try{let r=await fetch('/api/packing',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(current)});let d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'Request failed '+r.status);let raw=String(d.result||''),obj;try{obj=JSON.parse(raw.replace(/```json/gi,'').replace(/```/g,'').trim())}catch{}let box=$('packresult');box.innerHTML='';if(!obj){box.innerHTML='<div class="out">'+esc(raw||'Empty AI response')+'</div>';return}Object.entries(obj).forEach(([cat,items])=>{let h=document.createElement('h3');h.textContent=cat;box.appendChild(h);function add(label,list){if(label){let s=document.createElement('h3');s.textContent=label;box.appendChild(s)}(Array.isArray(list)?list:[]).forEach(x=>{let l=document.createElement('label');l.className='check';l.innerHTML='<input type="checkbox"><span>'+esc(x)+'</span>';l.querySelector('input').onchange=e=>l.classList.toggle('done',e.target.checked);box.appendChild(l)})}if(Array.isArray(items))add('',items);else if(items&&typeof items==='object')Object.entries(items).forEach(([s,a])=>add(s,a))});let btn=document.createElement('button');btn.className='primary';btn.textContent='Copy checklist';btn.onclick=()=>copy(box.innerText);box.appendChild(btn)}catch(e){$('body').insertAdjacentHTML('beforeend','<div class="out">Could not load packing list: '+esc(e.message)+'. Check Render logs and OPENROUTER_API_KEY.</div>')}}
+async function packing(){
+  const key='travelMatePacking_'+String(current.id);
+  modal('Packing list','<p>✦ TravelMate is preparing your personalised checklist…</p><div id="packresult"></div>');
+  const box=$('packresult');
+  function readSaved(){try{return JSON.parse(localStorage.getItem(key)||'null')}catch{return null}}
+  function saveItems(items){try{localStorage.setItem(key,JSON.stringify({items,updatedAt:Date.now()}))}catch(e){toast('Could not save checklist on this device')}}
+  function renderItems(items){
+    box.innerHTML='';
+    if(!Array.isArray(items)||!items.length){box.innerHTML='<div class="out">No checklist items found.</div>';return}
+    let done=items.filter(x=>x.checked).length;
+    const progress=document.createElement('div');
+    progress.className='out';
+    progress.innerHTML='<strong id="packCount">'+done+' / '+items.length+' packed</strong><div style="height:7px;background:#ffffff18;border-radius:9px;overflow:hidden;margin-top:9px"><div id="packBar" style="height:100%;width:'+(done/items.length*100)+'%;background:linear-gradient(90deg,#11c8f0,#3979fa);border-radius:9px"></div></div>';
+    box.appendChild(progress);
+    let lastCat='',lastSub='';
+    items.forEach((item,index)=>{
+      if(item.cat!==lastCat){let h=document.createElement('h3');h.textContent=item.cat;box.appendChild(h);lastCat=item.cat;lastSub=''}
+      if(item.sub&&item.sub!==lastSub){let h=document.createElement('h3');h.textContent=item.sub;box.appendChild(h);lastSub=item.sub}
+      const l=document.createElement('label');l.className='check'+(item.checked?' done':'');
+      const input=document.createElement('input');input.type='checkbox';input.checked=!!item.checked;
+      const span=document.createElement('span');span.textContent=item.text;
+      input.addEventListener('change',()=>{
+        items[index].checked=input.checked;
+        l.classList.toggle('done',input.checked);
+        saveItems(items);
+        const n=items.filter(x=>x.checked).length;
+        const count=$('packCount'),bar=$('packBar');
+        if(count)count.textContent=n+' / '+items.length+' packed';
+        if(bar)bar.style.width=(n/items.length*100)+'%';
+      });
+      l.append(input,span);box.appendChild(l);
+    });
+    const btn=document.createElement('button');btn.className='primary';btn.textContent='Copy checklist';btn.onclick=()=>copy(items.map(x=>(x.checked?'[x] ':'[ ] ')+x.text).join('\n'));box.appendChild(btn);
+    const reset=document.createElement('button');reset.className='primary';reset.style.background='linear-gradient(105deg,#29445f,#1a3048)';reset.textContent='Reset all checkboxes';reset.onclick=()=>{if(confirm('Reset all packing checkboxes for this trip?')){items.forEach(x=>x.checked=false);saveItems(items);renderItems(items);toast('Checklist reset')}};box.appendChild(reset);
+  }
+  const saved=readSaved();
+  if(saved&&Array.isArray(saved.items)&&saved.items.length){renderItems(saved.items);return}
+  try{
+    let r=await fetch('/api/packing',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(current)});
+    let d=await r.json().catch(()=>({}));
+    if(!r.ok)throw Error(d.error||'Request failed '+r.status);
+    let raw=String(d.result||''),obj;
+    try{obj=JSON.parse(raw.replace(/```json/gi,'').replace(/```/g,'').trim())}catch{}
+    if(!obj)throw Error(raw||'Empty AI response');
+    const items=[];
+    Object.entries(obj).forEach(([cat,value])=>{
+      if(Array.isArray(value)){value.forEach(x=>items.push({cat,sub:'',text:String(x),checked:false}))}
+      else if(value&&typeof value==='object'){
+        Object.entries(value).forEach(([sub,list])=>{
+          if(Array.isArray(list))list.forEach(x=>items.push({cat,sub,text:String(x),checked:false}));
+        });
+      }
+    });
+    if(!items.length)throw Error('The AI returned no checklist items');
+    saveItems(items);renderItems(items);
+  }catch(e){
+    box.innerHTML='<div class="out">Could not load packing list: '+esc(e.message)+'. Check the connection and try again.</div><button class="primary" onclick="packing()">Try again</button>';
+  }
+}
 async function copy(s){try{await navigator.clipboard.writeText(s);toast('Copied to clipboard')}catch{let x=document.createElement('textarea');x.value=s;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();toast('Copied')}}
 function docs(){let a=['Passport for every traveller','Visa or travel authorisation','Flight and accommodation confirmations','Travel insurance details','Children’s birth certificates / required consent documents','Bank cards and backup payment method','Secure copies of important documents','Emergency contacts'];modal('Documents checklist','<p>Tick off essentials. Rules depend on your passport and destination.</p>'+a.map(x=>'<label class="check"><input type="checkbox"><span>'+x+'</span></label>').join('')+'<button class="primary" id="copyDocs">Copy checklist</button><p><a target="_blank" rel="noopener" href="https://www.iatatravelcentre.com/">Check official entry requirements ↗</a></p>');$('copyDocs').onclick=()=>copy(Array.from(document.querySelectorAll('#body input[type="checkbox"]')).map(x=>(x.checked?'[x] ':'[ ] ')+x.parentElement.innerText).join('\\n'))}
 function budget(){modal('Trip budget','<p>Enter costs in one currency. This is an estimate, not a currency converter.</p><div class="mini"><div><label>Currency</label><input id="cur" value="INR"></div><div><label>Travellers</label><input id="bp" type="number" min="1" value="'+(current.adults+current.children)+'"></div><div><label>Stay per night</label><input id="stay" type="number" min="0" value="0"></div><div><label>Food per person/day</label><input id="food" type="number" min="0" value="0"></div><div><label>Transport total</label><input id="trans" type="number" min="0" value="0"></div><div><label>Other costs</label><input id="other" type="number" min="0" value="0"></div></div><button class="primary" onclick="calcBudget()">Calculate estimate</button><div id="budgetout"></div>')}
